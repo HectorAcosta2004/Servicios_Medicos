@@ -1,0 +1,18 @@
+;/*FB_PKG_DELIM*/
+
+__d("FDSAppMessengerOutline16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("505619"),16);b=a;g["default"]=b}),98);
+__d("FDSBookFilled24Icon",["cr:14540"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14540")}),98);
+__d("FDSBookFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("520626"),24);b=a;g["default"]=b}),98);
+__d("FDSCopyFilled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("500196"),16);b=a;g["default"]=b}),98);
+__d("FDSFollowingFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("602178"),24);b=a;g["default"]=b}),98);
+__d("FDSFriendConfirmFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("562980"),24);b=a;g["default"]=b}),98);
+__d("FDSFriendsFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("487559"),24);b=a;g["default"]=b}),98);
+__d("FDSHouseFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("481927"),24);b=a;g["default"]=b}),98);
+__d("FDSInternetOutline20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("487626"),20);b=a;g["default"]=b}),98);
+__d("FDSProfileCoverPhotoFilled20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("1014202"),20);b=a;g["default"]=b}),98);
+__d("FDSProfileOutline16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("558622"),16);b=a;g["default"]=b}),98);
+__d("FDSPushpinFilled20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("569237"),20);b=a;g["default"]=b}),98);
+__d("FDSScissorsFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("534422"),24);b=a;g["default"]=b}),98);
+__d("FDSShoppingBagFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("556468"),24);b=a;g["default"]=b}),98);
+__d("FDSTrendingFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("549519"),24);b=a;g["default"]=b}),98);
+__d("FDSWalkFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("854556"),24);b=a;g["default"]=b}),98);
