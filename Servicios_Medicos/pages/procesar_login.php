@@ -34,7 +34,7 @@ if ($result->num_rows > 0) {
         $_SESSION['username'] = $user['username'];
 
         // Redirigir al dashboard
-        header("Location: dashboard.php");
+        header("Location: dashboard_admin.php");
         exit();
     } else {
         // Contraseña incorrecta
