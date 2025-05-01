@@ -1,1 +1,0 @@
-Este proyecto se esta realizando para una iglesia que planea poder brindar atenciones medicas al publico en general se esta realizando con HTML,CSS,JS, BOOSTRAP, lo esta realizando ISSA VICTORIA y HECTOR ACOSTA

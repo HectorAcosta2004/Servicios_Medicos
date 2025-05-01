@@ -1,4 +1,0 @@
-;/*FB_PKG_DELIM*/
-
-__d("FDSTagFilled16Icon",["cr:15748"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15748")}),98);
-__d("FDSTagFilled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("502471"),16);b=a;g["default"]=b}),98);
