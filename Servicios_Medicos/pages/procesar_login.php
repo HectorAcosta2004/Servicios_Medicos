@@ -17,7 +17,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 // Consultar si el usuario existe
-$sql = "SELECT * FROM usuarios WHERE username = ?";
+$sql = "SELECT * FROM user WHERE username = ?";
 $stmt = $mysqli->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
@@ -28,9 +28,9 @@ if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 
     // Verificar la contraseña
-    if (password_verify($password, $user['password'])) {
+    if ($password === $user['password']) {
         // Contraseña correcta, iniciar sesión
-        $_SESSION['usuario_id'] = $user['id']; // Asumiendo que tienes un campo 'id' en la tabla
+        $_SESSION['user'] = $user['id']; // Asumiendo que tienes un campo 'id' en la tabla
         $_SESSION['username'] = $user['username'];
 
         // Redirigir al dashboard
