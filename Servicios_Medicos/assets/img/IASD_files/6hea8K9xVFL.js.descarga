@@ -1,0 +1,35 @@
+;/*FB_PKG_DELIM*/
+
+__d("FDSCalendarFilled24Icon",["cr:13823"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13823")}),98);
+__d("FDSCalendarFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("481121"),24);b=a;g["default"]=b}),98);
+__d("FDSCalendarStarFilled20Icon",["cr:14625"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14625")}),98);
+__d("FDSCalendarStarFilled20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("891128"),20);b=a;g["default"]=b}),98);
+__d("FDSCarFilled24Icon",["cr:14654"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14654")}),98);
+__d("FDSCarFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("485029"),24);b=a;g["default"]=b}),98);
+__d("FDSCheckmarkCircleFilled24Icon",["cr:13826"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13826")}),98);
+__d("FDSCheckmarkCircleFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("498147"),24);b=a;g["default"]=b}),98);
+__d("FDSCircleFilled24Icon",["cr:14727"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14727")}),98);
+__d("FDSCircleFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("545513"),24);b=a;g["default"]=b}),98);
+__d("FDSClockFilled24Icon",["cr:13828"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13828")}),98);
+__d("FDSClockFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("478797"),24);b=a;g["default"]=b}),98);
+__d("FDSCopyFilled16Icon",["cr:13991"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13991")}),98);
+__d("FDSEnvelopeFilled16Icon",["cr:14005"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14005")}),98);
+__d("FDSEnvelopeFilled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("495078"),16);b=a;g["default"]=b}),98);
+__d("FDSFollowingFilled24Icon",["cr:14016"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14016")}),98);
+__d("FDSFriendConfirmFilled24Icon",["cr:14979"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14979")}),98);
+__d("FDSFriendsFilled24Icon",["cr:13878"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13878")}),98);
+__d("FDSHouseFilled24Icon",["cr:14036"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:14036")}),98);
+__d("FDSInfoCircleFilled24Icon",["cr:13840"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:13840")}),98);
+__d("FDSInfoCircleFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("479178"),24);b=a;g["default"]=b}),98);
+__d("FDSMagnifyingGlassFilled24Icon",["cr:15243"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15243")}),98);
+__d("FDSMagnifyingGlassFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("491284"),24);b=a;g["default"]=b}),98);
+__d("FDSScissorsFilled24Icon",["cr:15628"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15628")}),98);
+__d("FDSShoppingBagFilled24Icon",["cr:15656"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15656")}),98);
+__d("FDSStarFilled24Icon",["cr:15699"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15699")}),98);
+__d("FDSStarFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("479330"),24);b=a;g["default"]=b}),98);
+__d("FDSTrendingFilled24Icon",["cr:15814"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15814")}),98);
+__d("FDSTruckShippingFilled24Icon",["cr:15834"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15834")}),98);
+__d("FDSTruckShippingFilled24PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("503034"),24);b=a;g["default"]=b}),98);
+__d("FDSWalkFilled24Icon",["cr:15863"],(function(a,b,c,d,e,f,g){"use strict";g["default"]=b("cr:15863")}),98);
+__d("XCometEventsCalendarControllerRouteBuilder",["jsRouteBuilder"],(function(a,b,c,d,e,f,g){a=c("jsRouteBuilder")("/events/calendar/{?focus}/",Object.freeze({}),void 0);b=a;g["default"]=b}),98);
+__d("XCometEventsNotificationsControllerRouteBuilder",["jsRouteBuilder"],(function(a,b,c,d,e,f,g){a=c("jsRouteBuilder")("/events/notifications/",Object.freeze({}),void 0);b=a;g["default"]=b}),98);

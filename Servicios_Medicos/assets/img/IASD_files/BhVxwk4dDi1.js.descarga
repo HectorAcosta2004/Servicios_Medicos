@@ -1,0 +1,10 @@
+;/*FB_PKG_DELIM*/
+
+__d("FDSCommentOutline16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("508557"),16);b=a;g["default"]=b}),98);
+__d("FDSGrid4Filled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("531309"),16);b=a;g["default"]=b}),98);
+__d("FDSLikeOutline16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("509925"),16);b=a;g["default"]=b}),98);
+__d("FDSMoreFilled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("533527"),16);b=a;g["default"]=b}),98);
+__d("FDSPushpinFilled16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("511755"),16);b=a;g["default"]=b}),98);
+__d("FDSShareOutline16PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("484398"),16);b=a;g["default"]=b}),98);
+__d("FDSSidebarLeftCloseFilled20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("557024"),20);b=a;g["default"]=b}),98);
+__d("FDSSidebarLeftOpenFilled20PNGIcon.react",["ix","fbicon"],(function(a,b,c,d,e,f,g,h){"use strict";a=d("fbicon")._(h("557028"),20);b=a;g["default"]=b}),98);
