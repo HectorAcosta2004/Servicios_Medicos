@@ -2,10 +2,10 @@
 session_start(); // Iniciar sesión
 
 // Conexión a la base de datos
-$host = 'localhost';
+$host = 'Localhost';
 $db = 'Servicios_Medicos';
 $user = 'root';
-$pass = '';
+$pass = '1234';
 
 $mysqli = new mysqli($host, $user, $pass, $db);
 if ($mysqli->connect_error) {
