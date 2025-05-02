@@ -142,7 +142,7 @@
                   </thead>
                   <tbody>
                     <?php
-                    $conn = new mysqli("localhost", "root", "", "servicios_medicos");
+                    $conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
                     if ($conn->connect_error) {
                       die("Error de conexión: " . $conn->connect_error);
                     }
@@ -315,19 +315,6 @@
       document.getElementById('modalEditar').style.display = 'block';
       document.getElementById('editServiceId').value = serviceId;
 
-      fetch('get_doctores.php')
-        .then(response => response.json())
-        .then(data => {
-          const select = document.getElementById('editDoctor');
-          select.innerHTML = '';
-          data.forEach(doctor => {
-            const option = document.createElement('option');
-            option.value = doctor.user_id;
-            option.text = doctor.name + ' ' + doctor.last_name;
-            if (doctor.user_id == doctorId) option.selected = true;
-            select.appendChild(option);
-          });
-        });
     }
 
     function abrirModalEliminar(serviceId) {
