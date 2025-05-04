@@ -231,19 +231,33 @@
       </div>
     </div>
     </div>
-    <div class="row mt-4">
-      <div class="col-lg-7 mb-lg-0 mb-4">
-        <div class="card z-index-2 h-100">
-          <div class="card-body p-3">
-            <h2>Pacientes por Servicio al dia </h2>
-            <div id="grafica-container" style="width: 100%; height: 400px;">
-              <canvas id="myChart"></canvas>
-            </div>
+    <div class="container-fluid py-4">
+  <!-- Título principal -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2>Reporte: Pacientes por Servicio al Día</h2>
+    </div>
+  </div>
 
+  <!-- Gráfica de pacientes por servicio -->
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card z-index-2 h-100">
+        <div class="card-header pb-0">
+          <h6 class="text-capitalize">Pacientes por Servicio (por semana)</h6>
+        </div>
+        <div class="card-body p-3">
+          <div class="chart">
+            <canvas id="myChart" class="chart-canvas"></canvas>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+
+
     </div>
     <div class="row mt-4">
       <div class="col-lg-7 mb-lg-0 mb-4">
