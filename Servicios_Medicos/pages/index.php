@@ -41,17 +41,17 @@
                 <div class="card-body">
                   <form role="form" action="procesar_login.php" method="POST">
                     <div class="mb-3">
-                      <input type="text" name="username" class="form-control form-control-lg" placeholder="USUARIO" aria-label="USUARIO" required>
+                      <input type="text" name="username" class="form-control form-control-lg" placeholder="USUARIO" aria-label="USUARIO" required style="background-color: #A55581; border-color: #A55581; color: white;">
                     </div>
                     <div class="mb-3">
-                      <input type="password" name="password" class="form-control form-control-lg" placeholder="CONTRASEÑA" aria-label="CONTRASEÑA" required>
+                      <input type="password" name="password" class="form-control form-control-lg" placeholder="CONTRASEÑA" aria-label="CONTRASEÑA" required style="background-color: #A55581; border-color: #A55581; color: white;">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe">
                       <label class="form-check-label" for="rememberMe">RECORDAR</label>
                     </div>
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">INICIAR SESIÓN</button>
+                    <button type="submit" class="btn btn-lg w-100 mt-4 mb-0" style="background-color: #A55581; border-color: #A55581; color: white;">INICIAR SESIÓN</button>
                     </div>
                   </form>
                 </div>
@@ -64,11 +64,7 @@
               </div>
             </div>
             <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-              <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg');
-          background-size: cover;">
-                <span class="mask bg-gradient-primary opacity-6"></span>
-                <h4 class="mt-5 text-white font-weight-bolder position-relative">"Attention is the new currency"</h4>
-                <p class="text-white position-relative">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
+            <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('https://raw.githubusercontent.com/HectorAcosta2004/Servicios_Medicos/main/Servicios_Medicos/assets/img/SaludYesperanza.png'); background-position: center;">
               </div>
             </div>
           </div>
