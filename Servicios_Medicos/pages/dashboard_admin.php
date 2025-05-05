@@ -3,13 +3,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-  <title>
-    SERVICIOS MEDICOS
-  </title>
+  <title>SERVICIOS MEDICOS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -20,7 +15,20 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
+<style>
+  main.main-content {
+    padding-top: 0px !important;
+  }
 
+  .container-fluid {
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+  }
+
+  .card {
+    margin-top: 0px !important;
+  }
+</style>
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php $current_page = 'dashboard'; ?>
@@ -31,11 +39,7 @@
       data-scroll="false">
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Reportes</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Reportes</li>
-          </ol>
-          <h6 class="font-weight-bolder text-white mb-0">Reportes</h6>
+          <h2 class="font-weight-bolder text-white mb-0">Reportes</h2>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -157,20 +161,17 @@
       </div>
     </div>
     </div>
-    <div class="container-fluid py-4">
-  <!-- Título principal -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <h2>Reporte: Pacientes por Servicio al Día</h2>
-    </div>
-  </div>
-
-  <!-- Gráfica de pacientes por servicio -->
-  <div class="row">
-    <div class="col-lg-8">
+    <div class="container-fluid pt-0 mt-0">
+      <div class="row mb-1">
+        <div class="col-12">
+          <h2 class="mb-1 mt-1">Reporte: Pacientes por Servicio al Día</h2>
+        </div>
+      </div>
+      <div class="row">
+      <div class="col-lg-8">
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0">
-          <h6 class="text-capitalize">Pacientes por Servicio (por semana)</h6>
+          <h6 class="text-capitalize">Pacientes por Servicio a la semana</h6>
         </div>
         <div class="card-body p-3">
           <div class="chart">
