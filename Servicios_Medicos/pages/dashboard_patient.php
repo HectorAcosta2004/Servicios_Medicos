@@ -19,7 +19,7 @@
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php';?>
   <?php $current_page = 'dashboard'; ?>
-  <?php include 'sidenav_admin.php';?>
+  <?php include 'sidenav_patient.php';?>
   <main class="main-content position-relative border-radius-lg ">
 
      

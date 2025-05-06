@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="min-height-300 bg-dark position-absolute w-100"></div>
     <?php include 'Navbar.php';?>
     <?php $current_page = 'citas'; ?>
-    <?php include 'sidenav.php';?>
+    <?php include 'sidenav_admin.php';?>
     <main class="main-content position-relative border-radius-lg ">
 
     <div class="container-fluid py-4">

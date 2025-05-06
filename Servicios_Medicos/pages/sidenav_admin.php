@@ -25,38 +25,38 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page == 'asignacion') ? 'active' : ''; ?>" href="../pages/Asignacion.php">
-          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
-          </div>
-          <span class="nav-link-text ms-1">Asignacion</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link <?php echo ($current_page == 'citas') ? 'active' : ''; ?>" href="../pages/ver_citas.php">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-credit-card text-dark text-sm opacity-10"></i>
+            <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
           </div>
           <span class="nav-link-text ms-1">Citas</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page == 'vr') ? 'active' : ''; ?>" href="../pages/">
+        <a class="nav-link <?php echo ($current_page == 'asignacion') ? 'active' : ''; ?>" href="../pages/Asignacion.php">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-app text-dark text-sm opacity-10"></i>
+            <i class="ni ni-credit-card text-dark text-sm opacity-10"></i>
           </div>
-          <span class="nav-link-text ms-1">Virtual Reality</span>
+          <span class="nav-link-text ms-1">Servicios</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <?php echo ($current_page == 'escribe') ? 'active' : ''; ?>" href="../pages/">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-world-2 text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">escribe</span>
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link <?php echo ($current_page == 'rtl') ? 'active' : ''; ?>" href="../pages/">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="ni ni-world-2 text-dark text-sm opacity-10"></i>
+            <i class="ni ni-app text-dark text-sm opacity-10"></i>
           </div>
-          <span class="nav-link-text ms-1">RTL</span>
+          <span class="nav-link-text ms-1">escribe</span>
         </a>
       </li>
 
@@ -69,7 +69,7 @@
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
           </div>
-          <span class="nav-link-text ms-1">Perfil</span>
+          <span class="nav-link-text ms-1">escribe</span>
         </a>
       </li>
     </ul>
