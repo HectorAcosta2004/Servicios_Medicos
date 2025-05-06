@@ -15,22 +15,6 @@
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
 
-<style>
-  main.main-content {
-    padding-top: 0px !important;
-  }
-
-  .container-fluid {
-    padding-top: 0px !important;
-    margin-top: 0px !important;
-  }
-
-  .card {
-    margin-top: 0px !important;
-  }
-
-</style>
-
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php';?>

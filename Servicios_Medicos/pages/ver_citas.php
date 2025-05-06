@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "servicios_medicos");
+$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Actualizar cita
@@ -37,33 +37,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="UTF-8">
   <title>Citas</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
-<body class="bg-light">
-  <div class="container py-4">
-    <h2>Listado de Citas</h2>
-    <ul class="list-group">
-      <?php
-      $sql = "
-      SELECT 
-        a.id_agenda,
-        a.date AS hora_cita,
-        s.service_id,
-        s.name AS servicio,
-        s.user_id AS doctor_id,
-        CONCAT(doc.name, ' ', doc.last_name) AS doctor,
-        CONCAT(pac.name, ' ', pac.last_name) AS paciente,
-        pac.user_id AS paciente_id
-      FROM agenda a
-      JOIN service s ON a.service_id = s.service_id
-      JOIN user doc ON s.user_id = doc.user_id
-      JOIN appointments ap ON ap.service_id = s.service_id
-      JOIN user pac ON ap.user_id = pac.user_id
-      WHERE ap.user_id = pac.user_id
-      ORDER BY a.date ASC";
-      $result = $conn->query($sql);
-      while ($row = $result->fetch_assoc()): ?>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
+
+<body class="g-sidenav-show   bg-gray-100">
+<div class="min-height-300 bg-dark position-absolute w-100"></div>
+    <?php include 'Navbar.php';?>
+    <?php $current_page = 'citas'; ?>
+    <?php include 'sidenav.php';?>
+    <main class="main-content position-relative border-radius-lg ">
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <nav aria-label="breadcrumb">
+          <h2 class="font-weight-bolder text-white mb-0">Listado de citas</h2>
+        </nav>
+        </div>
+        <div>
+          <div class="card">
+          </div>
+          <div class="card-body">
+          <div class="chart">
+          <ul class="list-group">
+            <?php
+              $sql = "SELECT 
+              a.id_agenda,
+              a.date AS hora_cita,
+              s.service_id,
+              s.name AS servicio,
+              s.user_id AS doctor_id,
+              CONCAT(doc.name, ' ', doc.last_name) AS doctor,
+              CONCAT(pac.name, ' ', pac.last_name) AS paciente,
+              pac.user_id AS paciente_id
+              FROM agenda a
+              JOIN service s ON a.service_id = s.service_id
+              JOIN user doc ON s.user_id = doc.user_id
+              JOIN appointments ap ON ap.service_id = s.service_id
+              JOIN user pac ON ap.user_id = pac.user_id
+              WHERE ap.user_id = pac.user_id
+              ORDER BY a.date ASC";
+              $result = $conn->query($sql);
+              while ($row = $result->fetch_assoc()): ?>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
           <div>
             <strong><?= htmlspecialchars($row['paciente']) ?></strong><br>
             Servicio: <?= htmlspecialchars($row['servicio']) ?><br>
@@ -78,6 +103,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endwhile; ?>
     </ul>
   </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+    
 
   <!-- Modal Editar -->
   <div class="modal fade" id="modalEditar" tabindex="-1">
