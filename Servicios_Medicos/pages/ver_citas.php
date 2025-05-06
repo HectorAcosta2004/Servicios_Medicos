@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "servicios_medicos");
+$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Actualizar cita
