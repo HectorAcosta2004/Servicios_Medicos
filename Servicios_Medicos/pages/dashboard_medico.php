@@ -18,8 +18,8 @@
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php';?>
-  <?php $current_page = 'dashboard'; ?>
-  <?php include 'sidenav.php';?>
+  <?php $current_page = 'dashboardm'; ?>
+  <?php include 'sidenav_patient.php';?>
   <main class="main-content position-relative border-radius-lg ">
 
      
@@ -27,7 +27,7 @@
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder text-white mb-0">Reportes</h2>
+          <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
         </nav>
         </div>
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -37,66 +37,7 @@
       </div>
     </div>
     </div>
-    <div class="container-fluid pt-0 mt-0">
-      <div class="row mb-1">
-        <div class="col-12">
-          <h2 class="mb-1 mt-1">Reporte: Pacientes por Servicio al Día</h2>
-        </div>
-      </div>
-      <div class="row">
-      <div class="col-lg-8">
-      <div class="card z-index-2 h-100">
-        <div class="card-header pb-0">
-          <h6 class="text-capitalize">Pacientes por Servicio a la semana</h6>
-        </div>
-        <div class="card-body p-3">
-          <div class="chart">
-            <canvas id="myChart" class="chart-canvas"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-
-
-    </div>
-    <div class="row mt-4">
-      <div class="col-lg-7 mb-lg-0 mb-4">
-        <div class="card ">
-          <div class="card-header pb-0 p-3">
-            <div class="d-flex justify-content-between">
-              <h6 class="mb-2">Sales by Country</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  </main>
-  <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-      <i class="fa fa-cog py-2"> </i>
-    </a>
-    <div class="card shadow-lg">
-      <div class="card-header pb-0 pt-3 ">
-        <div class="float-start">
-          <h5 class="mt-3 mb-0">Argon Configurator</h5>
-          <p>See our dashboard options.</p>
-        </div>
-        <div class="float-end mt-4">
-          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-            <i class="fa fa-close"></i>
-          </button>
-        </div>
         <!-- End Toggle Button -->
       </div>
       <hr class="horizontal dark my-1">

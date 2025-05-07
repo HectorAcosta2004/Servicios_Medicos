@@ -16,7 +16,7 @@
     <ul class="navbar-nav">
       
       <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page == 'dashboardp') ? 'active' : ''; ?>" href="../pages/dashboard_patient.php">
+        <a class="nav-link <?php echo ($current_page == 'dashboardm') ? 'active' : ''; ?>" href="../pages/dashboard_medico.php">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
           </div>
@@ -25,7 +25,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page == 'agendar') ? 'active' : ''; ?>" href="../pages/agendar.php">
+        <a class="nav-link <?php echo ($current_page == 'horario') ? 'active' : ''; ?>" href="../pages/agendar.php">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
           </div>

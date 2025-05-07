@@ -18,7 +18,7 @@
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php';?>
-  <?php $current_page = 'dashboardp'; ?>
+  <?php $current_page = 'agendar'; ?>
   <?php include 'sidenav_patient.php';?>
   <main class="main-content position-relative border-radius-lg ">
 
@@ -27,7 +27,7 @@
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
+          <h2 class="font-weight-bolder text-white mb-0">Agendar citas</h2>
         </nav>
         </div>
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
