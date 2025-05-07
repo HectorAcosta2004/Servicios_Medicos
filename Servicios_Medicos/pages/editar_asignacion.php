@@ -9,7 +9,19 @@ $service_id = $_GET['service_id'];
 // Si se envió el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nuevo_user_id = $_POST['user_id'];
-    $update = "UPDATE service SET user_id = $nuevo_user_id WHERE service_id = $service_id";
+    $nuevo_start_time = $_POST['time_consult_start'];
+    $nuevo_end_time = $_POST['time_consult_finish'];
+
+    // Asegurarnos de que las fechas se guarden en el formato correcto
+    $nuevo_start_time = date('Y-m-d H:i:s', strtotime($nuevo_start_time));
+    $nuevo_end_time = date('Y-m-d H:i:s', strtotime($nuevo_end_time));
+
+    $update = "UPDATE service 
+               SET user_id = $nuevo_user_id, 
+                   time_consult_start = '$nuevo_start_time', 
+                   time_consult_finish = '$nuevo_end_time' 
+               WHERE service_id = $service_id";
+
     if ($conn->query($update)) {
         header("Location: Asignacion.php");
         exit;
@@ -19,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Obtener datos del servicio actual
-$servicio = $conn->query("SELECT name, user_id FROM service WHERE service_id = $service_id")->fetch_assoc();
+$servicio = $conn->query("SELECT name, user_id, time_consult_start, time_consult_finish 
+                          FROM service WHERE service_id = $service_id")->fetch_assoc();
 
 // Obtener lista de doctores
 $doctores = $conn->query("SELECT user_id, CONCAT(name, ' ', last_name) AS nombre FROM user WHERE rol = 'professional'");
@@ -64,7 +77,7 @@ $doctores = $conn->query("SELECT user_id, CONCAT(name, ' ', last_name) AS nombre
       color: #555;
     }
 
-    select {
+    select, input[type="datetime-local"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -118,6 +131,12 @@ $doctores = $conn->query("SELECT user_id, CONCAT(name, ' ', last_name) AS nombre
         <?php endwhile; ?>
       </select>
 
+      <label for="time_consult_start">Fecha y Hora de Inicio:</label>
+      <input type="datetime-local" name="time_consult_start" value="<?= date('Y-m-d\TH:i', strtotime($servicio['time_consult_start'])) ?>" required>
+
+      <label for="time_consult_finish">Fecha y Hora de Fin:</label>
+      <input type="datetime-local" name="time_consult_finish" value="<?= date('Y-m-d\TH:i', strtotime($servicio['time_consult_finish'])) ?>" required>
+
       <button type="submit">Guardar Cambios</button>
       <a href="Asignacion.php" class="cancel-btn">Cancelar</a>
     </form>
@@ -125,4 +144,3 @@ $doctores = $conn->query("SELECT user_id, CONCAT(name, ' ', last_name) AS nombre
 
 </body>
 </html>
-
