@@ -22,7 +22,7 @@ session_start(); // Iniciar la sesión
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php';?>
   <?php $current_page = 'dashboardm'; ?>
-  <?php include 'sidenav_patient.php';?>
+  <?php include 'sidenav_medico.php';?>
   <main class="main-content position-relative border-radius-lg ">
 
      

@@ -1,47 +1,3 @@
-<?php
-session_start();
-$user_id = $_SESSION['user_id'] ?? null;
-
-if (!$user_id) {
-  echo "No se ha encontrado el ID del usuario en la sesión.";
-  exit;
-}
-
-$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
-
-if ($conn->connect_error) {
-  die("Error de conexión: " . $conn->connect_error);
-}
-
-// Traer servicios disponibles
-$sql_services = "SELECT s.service_id, s.name AS service_name, CONCAT(u.name, ' ', u.last_name) AS doctor_name, s.time_consult_start, s.time_consult_finish
-                 FROM service s
-                 JOIN user u ON s.user_id = u.user_id";
-$result_services = $conn->query($sql_services);
-
-if (!$result_services) {
-  echo "Error cargando servicios: " . $conn->error;
-  exit;
-}
-
-// Insertar cita
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
-  $service_id = $_POST['service_id'];
-
-  $stmt = $conn->prepare("INSERT INTO appointments (user_id, service_id) VALUES (?, ?)");
-  if ($stmt) {
-    $stmt->bind_param("ii", $user_id, $service_id);
-    if ($stmt->execute()) {
-      echo "<script>alert('¡Cita agendada exitosamente!');</script>";
-    } else {
-      echo "<script>alert('Error al agendar la cita.');</script>";
-    }
-    $stmt->close();
-  } else {
-    echo "Error preparando consulta: " . $conn->error;
-  }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
 
   <?php include 'Navbar.php'; ?>
-  <?php $current_page = 'agendar'; ?>
-  <?php include 'sidenav_patient.php'; ?>
+  <?php $current_page = 'agendarm'; ?>
+  <?php include 'sidenav_medico.php'; ?>
 
   <main class="main-content position-relative border-radius-lg ">
     <div class="container-fluid py-4">
