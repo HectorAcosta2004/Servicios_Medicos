@@ -56,39 +56,80 @@ $result_asignaciones = $conn->query("
 
           <h2 class="font-weight-bolder text-white mb-3">Asignación de Profesionales</h2>
 
-          <!-- Formulario unificado -->
+          <!-- Tabla Personal-->
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Asignar un Doctor a un Servicio</h6>
+              <h6>Personal-Servicio</h6>
             </div>
-            <div class="card-body">
-              <form method="POST" action="">
-                <div class="form-group mb-3">
-                  <label for="service_id">Seleccionar Servicio</label>
-                  <select class="form-control" name="service_id" id="service_id" required>
-                    <option value="">Selecciona un Servicio</option>
-                    <?php while ($service = $result_services->fetch_assoc()): ?>
-                      <option value="<?= $service['service_id'] ?>"><?= $service['name'] ?></option>
-                    <?php endwhile; ?>
-                  </select>
-                </div>
-
-                <div class="form-group mb-3">
-                  <label for="user_id">Seleccionar Doctor</label>
-                  <select class="form-control" name="user_id" id="user_id" required>
-                    <option value="">Selecciona un Doctor</option>
-                    <?php while ($doctor = $result_doctors->fetch_assoc()): ?>
-                      <option value="<?= $doctor['user_id'] ?>"><?= $doctor['doctor_name'] ?></option>
-                    <?php endwhile; ?>
-                  </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Asignar</button>
-              </form>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th>Profesional</th>
+                      <th>Servicio</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col text-end">
+              <button type="submit" class="btn btn-primary">Asignar</button>
             </div>
           </div>
 
-          <!-- Tabla de asignaciones -->
+          <!-- Tabla Servicios-->
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6>Servicios</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th>Servicio</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col text-end">
+              <button type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+          </div>
+
+          <!-- Tabla Usuarios-->
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6>Profesionales</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col text-end">
+              <button type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+          </div>
+
+          <!-- Tabla de asignaciones- no se ocupa inicio ni fin -->
           <div class="card mb-4">
             <div class="card-header pb-0">
               <h6>Asignaciones Existentes</h6>
@@ -121,6 +162,38 @@ $result_asignaciones = $conn->query("
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+
+          <!-- Formulario unificado -->
+          <div class="card mb-2">
+            <div class="card-header pb-0">
+              <h6>Nuevo servicio</h6>
+            </div>
+            <div class="card-body">
+              <form method="POST" action="">
+                <div class="form-group mb-3">
+                  <label for="service_id">Seleccionar Servicio</label>
+                  <select class="form-control" name="service_id" id="service_id" required>
+                    <option value="">Selecciona un Servicio</option>
+                    <?php while ($service = $result_services->fetch_assoc()): ?>
+                      <option value="<?= $service['service_id'] ?>"><?= $service['name'] ?></option>
+                    <?php endwhile; ?>
+                  </select>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="user_id">Seleccionar Doctor</label>
+                  <select class="form-control" name="user_id" id="user_id" required>
+                    <option value="">Selecciona un Doctor</option>
+                    <?php while ($doctor = $result_doctors->fetch_assoc()): ?>
+                      <option value="<?= $doctor['user_id'] ?>"><?= $doctor['doctor_name'] ?></option>
+                    <?php endwhile; ?>
+                  </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Asignar</button>
+              </form>
             </div>
           </div>
 
