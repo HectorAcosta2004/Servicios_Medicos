@@ -38,30 +38,32 @@ if (!$result) {
   <?php include 'Navbar.php';?>
   <?php $current_page = 'dashboardp'; ?>
   <?php include 'sidenav_patient.php';?>
+
   <main class="main-content position-relative border-radius-lg">
+
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <nav aria-label="breadcrumb">
-            <h2 class="font-weight-bolder text-white mb-0">Todas las citas</h2>
+            <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
           </nav>
         </div>
       </div>
-    </div>
 
-    <hr class="horizontal dark my-1">
-    <div class="card-body pt-sm-3 pt-0 overflow-auto">
-      <div>
+
+    <div class="card my-4 shadow-sm">
+      <div class="card-header pb-0">
         <h6 class="mb-0">Todas las Citas Programadas</h6>
       </div>
-      <div class="table-responsive p-0">
-        <table class="table align-items-center mb-0">
-          <thead>
-            <tr>
-              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Servicio</th>
-              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Doctor Asignado</th>
-              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hora de Inicio</th>
-              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hora de Finalización</th>
+    <div class="card-body px-0 pt-0 pb-2">
+    <div class="table-responsive p-4">
+      <table class="table align-items-center mb-0">
+        <thead>
+          <tr>
+              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Servicio</th>
+              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Doctor Asignado</th>
+              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Hora de Inicio</th>
+              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Hora de Finalización</th>
             </tr>
           </thead>
           <tbody>
