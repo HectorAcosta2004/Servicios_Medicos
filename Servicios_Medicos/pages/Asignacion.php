@@ -56,10 +56,10 @@ $result_asignaciones = $conn->query("
 
           <h2 class="font-weight-bolder text-white mb-3">Asignación de Profesionales</h2>
 
-          <!-- Tabla Personal-->
+          <!-- Tabla Profesional-Servicio-->
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Personal-Servicio</h6>
+              <h6>Profesional-Servicio</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -77,9 +77,41 @@ $result_asignaciones = $conn->query("
               </div>
             </div>
             <div class="col text-end">
-              <button type="submit" class="btn btn-primary">Asignar</button>
+              <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarPS">Agregar</button>
             </div>
           </div>
+
+          <!-- Modal Agregar Profesional-Servicio -->
+          <div class="modal fade" id="modalAgregarPS" tabindex="-1" aria-labelledby="modalAgregarPSLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalAgregarPSLabel">Asignar nuevo Profesional-Servicio</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+            <!-- Formulario del Profesional-Servicio -->
+                  <form method="POST" action="">
+                    <div class="mb-3">
+                      <label for="Servicio" class="form-label">Servicio</label>
+                      <select class="form-control">
+                        <option value="">Selecciona un servicio</option>
+                        </select>
+                      <label for="Profesional" class="form-label">Profesional</label>
+                      <select class="form-control">
+                        <option value="">Selecciona un profesional</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Guardar</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
           <!-- Tabla Servicios-->
           <div class="card mb-4">
@@ -101,31 +133,36 @@ $result_asignaciones = $conn->query("
               </div>
             </div>
             <div class="col text-end">
-              <button type="submit" class="btn btn-primary">Agregar</button>
+              <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarServicio">Agregar</button>
             </div>
           </div>
 
-          <!-- Tabla Usuarios-->
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Profesionales</h6>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+          <!-- Modal Agregar Servicio -->
+          <div class="modal fade" id="modalAgregarServicio" tabindex="-1" aria-labelledby="modalAgregarServicioLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalAgregarServicioLabel">Agregar nuevo Servicio</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+            <!-- Formulario del Profesional-Servicio -->
+                  <form method="POST" action="">
+                    <div class="mb-3">
+                      <label for="Servicio" class="form-label">Servicio</label>
+                      <input type="text" class="form-control" id="nuevoServicio" name="nombre_servicio" required>
+                      <label for="profesional" class="form-label">Profesional</label>
+                      <select class="form-control">
+                        <option value="">Selecciona un profesional</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Guardar</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
-            <div class="col text-end">
-              <button type="submit" class="btn btn-primary">Agregar</button>
             </div>
           </div>
 
@@ -197,11 +234,15 @@ $result_asignaciones = $conn->query("
             </div>
           </div>
 
+          
+
         </div>
       </div>
     </div>
   </main>
+  
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </html>
 
 <?php $conn->close(); ?>
