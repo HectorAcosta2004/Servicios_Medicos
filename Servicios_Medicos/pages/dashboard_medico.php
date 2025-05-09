@@ -74,6 +74,30 @@ $result = $conn->query($query);
           </nav>
         </div>
       </div>
+
+      <div class="card my-4 shadow-sm">
+      <div class="card-header pb-0">
+        <h6 class="mb-0">Citas Programadas</h6>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+      <div class="table-responsive p-4">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Paciente</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+      
     </div>
 
     <!-- Tabla para mostrar citas, servicio, paciente y fecha -->

@@ -53,17 +53,16 @@ if (!$result) {
 
     <div class="card my-4 shadow-sm">
       <div class="card-header pb-0">
-        <h6 class="mb-0">Todas las Citas Programadas</h6>
+        <h6 class="mb-0">Citas Programadas</h6>
       </div>
     <div class="card-body px-0 pt-0 pb-2">
     <div class="table-responsive p-4">
       <table class="table align-items-center mb-0">
         <thead>
           <tr>
-              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Servicio</th>
-              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Doctor Asignado</th>
-              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Hora de Inicio</th>
-              <th class="text-secondary text-xxs font-weight-bolder opacity-7">Hora de Finalización</th>
+              <th>Servicio</th>
+              <th>Doctor Asignado</th>
+              <th>Fecha y hora</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +73,6 @@ if (!$result) {
                         <td>{$row['service_name']}</td>
                         <td>{$row['doctor_name']}</td>
                         <td>{$row['time_consult_start']}</td>
-                        <td>{$row['time_consult_finish']}</td>
                       </tr>";
               }
             } else {
