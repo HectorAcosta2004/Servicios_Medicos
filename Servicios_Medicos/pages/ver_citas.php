@@ -54,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include 'Navbar.php';?>
     <?php $current_page = 'citas'; ?>
     <?php include 'sidenav_admin.php';?>
-    <main class="main-content position-relative border-radius-lg ">
 
+    <main class="main-content position-relative border-radius-lg ">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder text-white mb-0">Listado de citas</h2>
+          <h2 class="font-weight-bolder text-white mb-0">Citas</h2>
         </nav>
         </div>
         <div>

@@ -33,26 +33,12 @@ session_start(); // Iniciar la sesión
           <nav aria-label="breadcrumb">
             <h2 class="font-weight-bolder text-white mb-0">Reportes</h2>
           </nav>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container-fluid pt-0 mt-0">
-      <div class="row mb-1">
-        <div class="col-12">
-          <h2 class="mb-1 mt-1">Reporte: Pacientes por Servicio al Día</h2>
-        </div>
-      </div>
-      
+         </div>
       <div class="row">
         <div class="col-lg-8">
           <div class="card z-index-2 h-100">
             <div class="card-header pb-0">
-              <h6 class="text-capitalize">Pacientes por Servicio a la semana</h6>
+              <h6 class="mb-2">Pacientes por semana</h6>
             </div>
             <div class="card-body p-3">
               <div class="chart">
@@ -69,7 +55,7 @@ session_start(); // Iniciar la sesión
         <div class="card">
           <div class="card-header pb-0 p-3">
             <div class="d-flex justify-content-between">
-              <h6 class="mb-2">Sales by Country</h6>
+              <h6 class="mb-2">Pacientes por mes</h6>
             </div>
           </div>
         </div>
