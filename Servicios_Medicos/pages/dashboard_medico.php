@@ -27,7 +27,7 @@ $result = $conn->query($query);
 <html lang="en">
 
 <head>
-  <title>SERVICIOS MEDICOS</title>
+  <title>Mis Citas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
