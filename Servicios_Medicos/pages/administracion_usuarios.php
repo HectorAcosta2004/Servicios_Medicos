@@ -1,5 +1,18 @@
+<?php
+// Conectar a la base de datos
+$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
+if ($conn->connect_error) {
+  die("Error de conexion: ". $conn->connect_error);
+  }
+$sql = "SELECT user_id,name,last_name,rol FROM user";
+$result_usuarios = $conn->query($sql);
+if (!$result_usuarios) {
+  die("Error de consulta: " . $conn->error);
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Administración de Usuarios</title>
@@ -35,10 +48,22 @@
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>Rol</th>
-                      <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
+                    <?php while ($row = $result_usuarios->fetch_assoc()): ?>
+                      <tr>
+                      <!-- <td><?= $row['user_id'] ?></td>-->
+                        <td><?= $row['name'] ?></td>
+                        <td><?= $row['last_name'] ?></td>
+                        <td><?= $row['rol'] ?></td>
+                        <td>
+                          <a href="editar_usuario.php?user_id=<?= $row['user_id'] ?>">Editar</a> |
+                          <a href="eliminar_usuario.php?user_id=<?= $row['user_id'] ?>"
+                            onclick="return confirm('¿Deseas eliminar este usuario?')">Eliminar</a>
+                        </td>
+                      </tr>
+                    <?php endwhile; ?>
                   </tbody>
                 </table>
               </div>
@@ -49,7 +74,8 @@
       </div>
     </div>
   </main>
-  
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>

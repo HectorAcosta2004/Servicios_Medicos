@@ -1,17 +1,3 @@
-<!--
-=========================================================
-* Argon Dashboard 3 - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,24 +38,26 @@
         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
           <div class="card z-index-0">
             <div class="card-header text-center pt-4">
-              <h5>REGISTRATE AQUI</h5>
+              <h5>Regístrate aqui</h5>
             </div>
             <div class="card-body">
-              <form role="form">
+              <form role="form" method="POST" action="crear_usuario.php">
                 <div class="mb-3">
-                  <input type="text" class="form-control" placeholder="NOMBRE" aria-label="Name">
+                  <input type="text" class="form-control" name="nombre" placeholder="Nombre" aria-label="Name">
                 </div>
                 <div class="mb-3">
-                  <input type="email" class="form-control" placeholder="CORREO" aria-label="Email">
+                  <input type="text" class="form-control" name="apellido" placeholder="Apellido" aria-label="Last_name">
                 </div>
                 <div class="mb-3">
-                  <input type="password" class="form-control" placeholder="CONTRASEÑA" aria-label="Password">
+                  <input type="email" class="form-control" name="correo" placeholder="Correo" aria-label="Email">
                 </div>
-                <div class="form-check form-check-info text-start">
+                <div class="mb-3">
+                  <input type="password" class="form-control" name="contrasena" placeholder="Contraseña" aria-label="Password">
+                </div>
                 <div class="text-center">
-                  <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2">CREAR USUARIO</button>
+                  <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">CREAR USUARIO</button>
                 </div>
-                <p class="text-sm mt-3 mb-0">YA TIENES UNA CUENTA? <a href="javascript:;" class="text-dark font-weight-bolder">INICIAR SESION</a></p>
+                <p class="text-sm mt-3 mb-0">YA TIENES UNA CUENTA? <a href="../pages/index.php" class="text-dark font-weight-bolder">INICIAR SESION</a></p>
               </form>
             </div>
           </div>

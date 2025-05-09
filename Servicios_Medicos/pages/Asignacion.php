@@ -66,13 +66,21 @@ $result_asignaciones = $conn->query("
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th>Profesional</th>
                       <th>Servicio</th>
+                      <th>Profesional </th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
+                  <?php while ($row = $result_asignaciones->fetch_assoc()): ?>
                   <tbody>
+                  <td><?= $row['service_name'] ?></td>
+                        <td><?= $row['doctor_name'] ?></td>
+                        <td>
+                          <a href="editar_asignacion.php?service_id=<?= $row['service_id'] ?>">Editar</a> |
+                          <a href="eliminar_asignacion.php?service_id=<?= $row['service_id'] ?>" onclick="return confirm('¿Deseas eliminar esta asignación?')">Eliminar</a>
+                        </td>
                   </tbody>
+                  <?php endwhile; ?>
                 </table>
               </div>
             </div>
@@ -121,6 +129,7 @@ $result_asignaciones = $conn->query("
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
+                <?php while ($row = $result_services->fetch_assoc()): ?>
                   <thead>
                     <tr>
                       <th>Servicio</th>
@@ -128,7 +137,12 @@ $result_asignaciones = $conn->query("
                     </tr>
                   </thead>
                   <tbody>
-                  </tbody>
+                  <td><?= htmlspecialchars($row['name']) ?></td>
+
+                          <a href="editar_asignacion.php?service_id=<?= $row['service_id'] ?>">Editar</a> |
+                          <a href="eliminar_asignacion.php?service_id=<?= $row['service_id'] ?>" onclick="return confirm('¿Deseas eliminar este servicio?')">Eliminar</a>
+                        </td>
+                        <?php endwhile; ?>
                 </table>
               </div>
             </div>
@@ -163,74 +177,6 @@ $result_asignaciones = $conn->query("
                   </form>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Tabla de asignaciones- no se ocupa inicio ni fin -->
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Asignaciones Existentes</h6>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th>Servicio</th>
-                      <th>Doctor Asignado</th>
-                      <th>Inicio</th>
-                      <th>Fin</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php while ($row = $result_asignaciones->fetch_assoc()): ?>
-                      <tr>
-                        <td><?= $row['service_name'] ?></td>
-                        <td><?= $row['doctor_name'] ?></td>
-                        <td><?= $row['time_consult_start'] ?></td>
-                        <td><?= $row['time_consult_finish'] ?></td>
-                        <td>
-                          <a href="editar_asignacion.php?service_id=<?= $row['service_id'] ?>">Editar</a> |
-                          <a href="eliminar_asignacion.php?service_id=<?= $row['service_id'] ?>" onclick="return confirm('¿Deseas eliminar esta asignación?')">Eliminar</a>
-                        </td>
-                      </tr>
-                    <?php endwhile; ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Formulario unificado -->
-          <div class="card mb-2">
-            <div class="card-header pb-0">
-              <h6>Nuevo servicio</h6>
-            </div>
-            <div class="card-body">
-              <form method="POST" action="">
-                <div class="form-group mb-3">
-                  <label for="service_id">Seleccionar Servicio</label>
-                  <select class="form-control" name="service_id" id="service_id" required>
-                    <option value="">Selecciona un Servicio</option>
-                    <?php while ($service = $result_services->fetch_assoc()): ?>
-                      <option value="<?= $service['service_id'] ?>"><?= $service['name'] ?></option>
-                    <?php endwhile; ?>
-                  </select>
-                </div>
-
-                <div class="form-group mb-3">
-                  <label for="user_id">Seleccionar Doctor</label>
-                  <select class="form-control" name="user_id" id="user_id" required>
-                    <option value="">Selecciona un Doctor</option>
-                    <?php while ($doctor = $result_doctors->fetch_assoc()): ?>
-                      <option value="<?= $doctor['user_id'] ?>"><?= $doctor['doctor_name'] ?></option>
-                    <?php endwhile; ?>
-                  </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Asignar</button>
-              </form>
             </div>
           </div>
 
