@@ -1,30 +1,36 @@
 <?php
-// Conexión a la base de datos
 $conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
 if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
+    die("Conexión fallida: " . $conn->connect_error);
 }
 
-// Obtener el ID del servicio de la consulta AJAX
 $service_id = $_GET['service_id'];
+$appointment_date = $_GET['appointment_date'];
 
-// Consultar los pacientes asociados a ese servicio
 $query = "
-    SELECT u.name AS patient_name
+    SELECT u.name, u.last_name
     FROM appointments app
     JOIN user u ON app.user_id = u.user_id
-    WHERE app.service_id = $service_id AND u.rol = 'pacient'
+    JOIN agenda a ON app.service_id = a.service_id
+    JOIN service s ON app.service_id = s.service_id
+    WHERE app.service_id = ? 
+      AND a.date = ? 
+      AND a.date BETWEEN s.time_consult_start AND s.time_consult_finish
 ";
-$result = $conn->query($query);
 
-// Mostrar los pacientes
+$stmt = $conn->prepare($query);
+$stmt->bind_param("is", $service_id, $appointment_date);
+$stmt->execute();
+$result = $stmt->get_result();
+
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<li>" . $row['patient_name'] . "</li>";
+    while ($paciente = $result->fetch_assoc()) {
+        echo "<li>" . htmlspecialchars($paciente['name'] . ' ' . $paciente['last_name']) . "</li>";
     }
 } else {
-    echo "<li>No hay pacientes registrados para este servicio.</li>";
+    echo "<li>No hay pacientes para esta cita.</li>";
 }
 
+$stmt->close();
 $conn->close();
 ?>
