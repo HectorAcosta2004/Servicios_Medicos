@@ -7,7 +7,7 @@ session_start(); // Iniciar la sesión
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>SERVICIOS MEDICOS</title>
+  <title>REPORTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
