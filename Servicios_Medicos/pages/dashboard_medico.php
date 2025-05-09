@@ -1,152 +1,179 @@
 <?php
 session_start(); // Iniciar la sesión
 
+// Conexión a la base de datos
+$conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Obtener las citas, los servicios, las fechas y los pacientes
+$query = "
+    SELECT app.cita_id, s.name AS service_name, a.date AS appointment_date, app.service_id
+    FROM appointments app
+    JOIN service s ON app.service_id = s.service_id
+    JOIN agenda a ON app.service_id = a.service_id
+    ORDER BY a.date;
+";
+
+$result = $conn->query($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <title>SERVICIOS MEDICOS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  <!-- Nucleo Icons -->
   <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
+  <!-- Estilos para el modal -->
+  <style>
+    .modal-content {
+      padding: 20px;
+    }
+    .modal-header {
+      background-color: #f8f9fa;
+    }
+    .modal-footer {
+      border-top: none;
+    }
+    .modal-body ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .modal-body li {
+      padding: 5px 0;
+    }
+  </style>
 </head>
 
-<body class="g-sidenav-show   bg-gray-100">
+<body class="g-sidenav-show bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
-  <?php include 'Navbar.php';?>
+  <?php include 'Navbar.php'; ?>
   <?php $current_page = 'dashboardm'; ?>
-  <?php include 'sidenav_medico.php';?>
-  <main class="main-content position-relative border-radius-lg ">
-
-     
+  <?php include 'sidenav_medico.php'; ?>
+  
+  <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
-        </nav>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-          </div>
+          <nav aria-label="breadcrumb">
+            <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
+          </nav>
         </div>
       </div>
-    </div>
     </div>
 
-        <!-- End Toggle Button -->
-      </div>
-      <hr class="horizontal dark my-1">
-      <div class="card-body pt-sm-3 pt-0 overflow-auto">
-        <!-- Sidebar Backgrounds -->
-        <div>
-          <h6 class="mb-0">Sidebar Colors</h6>
-        </div>
-        <a href="javascript:void(0)" class="switch-trigger background-color">
-          <div class="badge-colors my-2 text-start">
-            <span class="badge filter bg-gradient-primary active" data-color="primary"
-              onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+    <!-- Tabla para mostrar citas, servicio, paciente y fecha -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-header pb-0">
+            <h6>Mis Citas, Servicios y Pacientes</h6>
           </div>
-        </a>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th>ID Cita</th>
+                    <th>Servicio</th>
+                    <th>Fecha de Cita</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  // Verificar si hay resultados
+                  if ($result->num_rows > 0) {
+                      // Mostrar los resultados
+                      while ($row = $result->fetch_assoc()) {
+                          echo "<tr>";
+                          echo "<td>" . $row['cita_id'] . "</td>";
+                          echo "<td>" . $row['service_name'] . "</td>";
+                          echo "<td>" . $row['appointment_date'] . "</td>";
+                          echo "<td><button class='btn btn-info' data-toggle='modal' data-target='#modal".$row['cita_id']."' data-service-id='".$row['service_id']."'>Ver Descripción</button></td>";
+                          echo "</tr>";
+
+                          // Modal para cada cita
+                          echo "
+                          <div class='modal fade' id='modal".$row['cita_id']."' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                              <div class='modal-content'>
+                                <div class='modal-header'>
+                                  <h5 class='modal-title' id='exampleModalLabel'>Descripción de la Cita</h5>
+                                  <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                  </button>
+                                </div>
+                                <div class='modal-body' id='modal-body-".$row['cita_id']."'>
+                                  <p><strong>ID Cita:</strong> " . $row['cita_id'] . "</p>
+                                  <p><strong>Servicio:</strong> " . $row['service_name'] . "</p>
+                                  <p><strong>Fecha de Cita:</strong> " . $row['appointment_date'] . "</p>
+                                  <p><strong>Pacientes:</strong></p>
+                                  <ul id='pacientes-list-".$row['cita_id']."'>
+                                    <!-- Aquí se llenarán los pacientes de este servicio -->
+                                  </ul>
+                                </div>
+                                <div class='modal-footer'>
+                                  <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cerrar</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          ";
+                      }
+                  } else {
+                      echo "<tr><td colspan='4'>No se encontraron citas.</td></tr>";
+                  }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  </div>
-  <!--   Core JS Files   -->
+  </main>
+
+  <!-- Scripts -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/chartjs.min.js"></script>
-  <!--DATOS DE LA GRAFICA DE PASIENTES POR SERVICIO AL DIA -->
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-        // Realizar la consulta al PHP para obtener los datos
-        fetch('datos_grafica.php')
-            .then(response => response.json())
-            .then(data => {
-                // Procesar los datos y construir las etiquetas y valores para la gráfica
-                const services = [...new Set(data.map(item => item.service_name))]; // Servicios únicos
-                const weeks = [...new Set(data.map(item => item.week_number))]; // Semanas únicas
-
-                // Inicializar un objeto para almacenar los datos por servicio y semana
-                const serviceData = {};
-
-                // Llenar el objeto con los datos de pacientes por semana
-                services.forEach(service => {
-                    serviceData[service] = new Array(weeks.length).fill(0);
-                });
-
-                // Llenar los datos en el objeto serviceData
-                data.forEach(item => {
-                    const serviceIndex = services.indexOf(item.service_name);
-                    const weekIndex = weeks.indexOf(item.week_number);
-                    serviceData[item.service_name][weekIndex] = item.patients_count;
-                });
-
-                // Crear los datasets para cada servicio
-                const datasets = services.map(service => ({
-                    label: service,
-                    data: serviceData[service],
-                    borderColor: getRandomColor(),
-                    backgroundColor: getRandomColor(0.2),
-                    borderWidth: 1
-                }));
-
-                // Crear la gráfica
-                const ctx = document.getElementById('myChart').getContext('2d');
-                const myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: weeks,
-                        datasets: datasets
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error:', error));
-
-        // Función para generar colores aleatorios
-        function getRandomColor(alpha = 1) {
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
-            return `rgba(${r},${g},${b},${alpha})`;
-        }
-  </script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
-</body>
 
+  <!-- Scripts para el modal (Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Cargar los pacientes al abrir el modal -->
+  <script>
+    $(document).ready(function() {
+      // Al abrir un modal, cargamos los pacientes del servicio relacionado
+      $('.btn-info').click(function() {
+        var service_id = $(this).data('service-id');
+        var modalId = $(this).data('target'); // Obtener el ID del modal
+
+        // Realizar la consulta AJAX para obtener los pacientes de ese servicio
+        $.ajax({
+          url: 'get_pacientes.php', // Archivo que obtendrá los pacientes
+          type: 'GET',
+          data: { service_id: service_id },
+          success: function(data) {
+            // Llenar el modal con los pacientes
+            $('#pacientes-list-' + modalId.split('#modal')[1]).html(data);
+          }
+        });
+      });
+    });
+  </script>
+</body>
 </html>
+<?php
+// Cerrar la conexión a la base de datos
+$conn->close();
+?>
