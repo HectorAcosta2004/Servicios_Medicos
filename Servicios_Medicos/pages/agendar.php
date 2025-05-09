@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
 <html lang="en">
 
 <head>
-  <title>SERVICIOS MEDICOS</title>
+  <title>Agendar Cita</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
