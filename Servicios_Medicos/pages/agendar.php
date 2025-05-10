@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'pacient') {
+    header("Location: index.php");
+    exit();
+}
 $user_id = $_SESSION['user_id'] ?? null;
 
 if (!$user_id) {

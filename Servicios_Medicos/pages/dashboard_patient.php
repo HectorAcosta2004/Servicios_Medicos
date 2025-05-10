@@ -1,5 +1,11 @@
 <?php
+
 session_start();
+
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'pacient') {
+    header("Location: index.php");
+    exit();
+}
 
 $conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 

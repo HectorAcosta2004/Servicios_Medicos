@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>
-    INICIO SESIONN
+    INICIO SESION
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -41,6 +40,7 @@
                 <div class="card-body">
                   <form role="form" action="procesar_login.php" method="POST">
                     <div class="mb-3">
+                      <!-- Cambié 'name' por 'username' -->
                       <input type="text" name="username" class="form-control form-control-lg" placeholder="USUARIO" aria-label="USUARIO" required style="background-color: #A55581; border-color: #A55581; color: white;">
                     </div>
                     <div class="mb-3">

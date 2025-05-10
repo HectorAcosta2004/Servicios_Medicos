@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+// Verificar si el usuario está autenticado y tiene rol 'admin'
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') {
+    header("Location: index.php"); // Redirigir si no tiene permiso
+    exit();
+}
 $conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);

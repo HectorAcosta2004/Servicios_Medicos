@@ -4,10 +4,10 @@ session_start(); // Iniciar sesión
 // Conexión a la base de datos
 $host = 'Localhost';
 $db = 'Servicios_Medicos';
-$user = 'root';
+$db_user = 'root';
 $pass = '1234';
 
-$mysqli = new mysqli($host, $user, $pass, $db);
+$mysqli = new mysqli($host, $db_user, $pass, $db);
 if ($mysqli->connect_error) {
     die("Error de conexión: " . $mysqli->connect_error);
 }
@@ -25,16 +25,25 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     // Si el usuario existe, obtener la fila
-    $user = $result->fetch_assoc();
+    $userData = $result->fetch_assoc();
 
     // Verificar la contraseña
-    if ($password === $user['password']) {
+    if ($password === $userData['password']) {
         // Contraseña correcta, iniciar sesión
-        $_SESSION['user'] = $user['id']; // Asumiendo que tienes un campo 'id' en la tabla
-        $_SESSION['username'] = $user['username'];
+        $_SESSION['user'] = $userData['id'];
+        $_SESSION['name'] = $userData['name'];
+        $_SESSION['role'] = $userData['rol'];
 
-        // Redirigir al dashboard
-        header("Location: dashboard_admin.php");
+        // Redirigir al dashboard según el rol
+        if ($userData['rol'] == 'admin') {
+            header("Location: dashboard_admin.php");
+        } elseif ($userData['rol'] == 'pacient') {
+            header("Location: dashboard_patient.php");
+        } elseif ($userData['rol'] == 'professional') {
+            header("Location: dashboard_medico.php");
+        } else {
+            header("Location: index.php");
+        }
         exit();
     } else {
         // Contraseña incorrecta

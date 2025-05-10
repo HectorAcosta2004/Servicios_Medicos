@@ -2,6 +2,12 @@
 session_start(); // Iniciar la sesión
 
 
+// Verificar si el usuario está autenticado y tiene rol 'admin'
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') {
+    header("Location: index.php"); // Redirigir si no tiene permiso
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
