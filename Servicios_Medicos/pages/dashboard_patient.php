@@ -1,12 +1,13 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'pacient') {
-    header("Location: index.php");
-    exit();
+// Verificar si el usuario está logueado y si es un 'professional'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'pacient') {
+  header("Location: index.php");
+  exit();
 }
 
-$user_id = $_SESSION['user'] ?? null;
+$user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
     echo "No se ha encontrado el ID del usuario en la sesión.";
     exit();

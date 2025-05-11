@@ -1,56 +1,41 @@
 <?php
-// Configuración de la base de datos
-$servername = "localhost";
-$username = "root";
-$password = "1234";
-$dbname = "Servicios_Medicos";
+header('Content-Type: application/json');
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 
-// Verificar la conexión
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(["error" => "Error de conexión: " . $conn->connect_error]));
 }
 
-// Consulta SQL
 $sql = "
-    SELECT 
-    s.name AS service_name, 
-    WEEK(a.date) AS week_number, 
-    COUNT(DISTINCT ap.user_id) AS patients_count
-FROM 
-    appointments ap
-JOIN 
-    service s ON ap.service_id = s.service_id
-JOIN 
-    user u ON ap.user_id = u.user_id
-JOIN 
-    agenda a ON ap.service_id = a.service_id  -- Aquí se une con la tabla agenda para obtener la fecha
-WHERE 
-    u.rol = 'pacient'
-GROUP BY 
-    service_name, week_number
-ORDER BY 
-    service_name, week_number;
-
+SELECT 
+    YEAR(a.time_consult_start) AS year,
+    WEEK(a.time_consult_start, 1) AS week_number,
+    s.name AS service_name,
+    COUNT(*) AS patients_count
+FROM agenda a
+JOIN service s ON a.service_id = s.service_id
+GROUP BY year, week_number, service_name
+ORDER BY year, week_number;
 ";
 
 $result = $conn->query($sql);
 
-$data = array();
+$data = [];
 
-if ($result->num_rows > 0) {
+if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
+        $data[] = [
+            'year' => $row['year'],
+            'week_number' => $row['week_number'],
+            'service_name' => $row['service_name'],
+            'patients_count' => (int)$row['patients_count']
+        ];
     }
+    echo json_encode($data);
 } else {
-    echo "0 results";
+    echo json_encode(["error" => "Error en la consulta: " . $conn->error]);
 }
 
-// Convertir el array a formato JSON
-echo json_encode($data);
-
-// Cerrar la conexión
 $conn->close();
 ?>

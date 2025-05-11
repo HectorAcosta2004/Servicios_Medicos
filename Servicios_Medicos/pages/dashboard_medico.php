@@ -1,39 +1,46 @@
 <?php
-session_start();
 
+session_start(); // Iniciar sesión
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'professional') {
+// Verificar si el usuario está logueado y si es un 'professional'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
     header("Location: index.php");
     exit();
 }
 
 // Conexión a la base de datos
-$conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
-if ($conn->connect_error) {
-  die("Error de conexión: " . $conn->connect_error);
+$mysqli = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
+if ($mysqli->connect_error) {
+    die("Error de conexión: " . $mysqli->connect_error);
 }
 
 // Consulta SQL
-$query = "
-SELECT
-    app.cita_id, 
-    s.name AS service_name, 
-    a.date AS appointment_date, 
-    app.service_id,
-    u.name AS user_name,
-    u.last_name AS user_last_name,
-    s.time_consult_start,
-    s.time_consult_finish
-FROM appointments app
-JOIN service s ON app.service_id = s.service_id
-JOIN agenda a ON app.service_id = a.service_id
-JOIN user u ON app.user_id = u.user_id
-WHERE u.rol = 'pacient'
-ORDER BY a.date
+$sql = "
+  SELECT 
+    DATE(a.time_consult_start) AS fecha, 
+    a.time_consult_start, 
+    a.time_consult_finish,  -- Asegúrate de que esta línea esté incluida
+    s.name AS servicio,
+    CONCAT(u1.name, ' ', u1.last_name) AS paciente, 
+    CONCAT(u2.name, ' ', u2.last_name) AS doctor
+  FROM agenda a
+  JOIN service s ON a.service_id = s.service_id
+  JOIN appointments ap ON ap.service_id = s.service_id
+  JOIN user u1 ON ap.user_id = u1.user_id AND u1.rol = 'pacient'
+  JOIN user u2 ON s.user_id = u2.user_id AND u2.rol = 'professional'
+  WHERE u2.user_id = ?  -- Agregar la condición para que solo vea las citas del médico actual
+  ORDER BY a.time_consult_start
 ";
 
-$result = $conn->query($query);
+$stmt = $mysqli->prepare($sql);
+$stmt->bind_param("i", $_SESSION['user_id']);  // Usar el ID del usuario de la sesión
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -77,10 +84,16 @@ $result = $conn->query($query);
                 <?php
                 if ($result->num_rows > 0) {
                   while ($row = $result->fetch_assoc()) {
+                    // Verificar si las horas de inicio y finalización están vacías o nulas y asignar un valor predeterminado
+                    $time_start = !empty($row['time_consult_start']) ? htmlspecialchars($row['time_consult_start']) : 'No disponible';
+                    $time_finish = !empty($row['time_consult_finish']) ? htmlspecialchars($row['time_consult_finish']) : 'No disponible';
+                    $paciente = htmlspecialchars($row['paciente']);
+
+                    // Imprimir las filas de la tabla
                     echo "<tr>";
-                    echo "<td>" . $row['time_consult_start'] . "</td>";
-                    echo "<td>" . $row['time_consult_finish'] . "</td>";
-                    echo "<td>" . $row['user_name'] . " " . $row['user_last_name'] . "</td>";
+                    echo "<td>" . $time_start . "</td>";
+                    echo "<td>" . $time_finish . "</td>";
+                    echo "<td>" . $paciente . "</td>";
                     echo "</tr>";
                   }
                 } else {
@@ -104,4 +117,4 @@ $result = $conn->query($query);
   <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
 </body>
 </html>
-<?php $conn->close(); ?>
+<?php $mysqli->close(); ?>

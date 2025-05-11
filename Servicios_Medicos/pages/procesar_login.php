@@ -34,11 +34,9 @@ if ($result->num_rows > 0) {
     // Verificar la contraseña
     if ($password === $userData['password']) {
         // Contraseña correcta, iniciar sesión
-        $_SESSION['user'] = $userData['user_id'];
+        $_SESSION['user_id'] = $userData['user_id'];  // Cambiar 'user' a 'user_id'
         $_SESSION['name'] = $userData['name'];
         $_SESSION['role'] = $userData['rol'];
-     //   echo 'ROL GUARDADO: ' . $_SESSION['role']; exit;
-
 
         // Redirigir al dashboard según el rol
         if ($userData['rol'] == 'admin') {

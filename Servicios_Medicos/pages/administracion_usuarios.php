@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// Verificar si el usuario está autenticado y tiene rol 'admin'
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') {
-    header("Location: index.php"); // Redirigir si no tiene permiso
-    exit();
+// Verificar si el usuario está logueado y si es un 'professional'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: index.php");
+  exit();
 }
 // Conectar a la base de datos
 $conn = new mysqli("localhost", "root", "1234", "servicios_medicos");

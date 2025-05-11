@@ -1,10 +1,9 @@
 <?php
 session_start();
-
-// Verificar si el usuario está autenticado y tiene rol 'admin'
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') {
-    header("Location: index.php"); // Redirigir si no tiene permiso
-    exit();
+// Verificar si el usuario está logueado y si es un 'professional'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: index.php");
+  exit();
 }
 $conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 
@@ -18,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $paciente_id = $_POST['paciente_id'];
 
     // Actualizar agenda con fecha y servicio (el doctor ya viene en el servicio)
-    $conn->query("UPDATE agenda SET date = '$fecha', service_id = '$servicio_id' WHERE id_agenda = $id_agenda");
+    $conn->query("UPDATE agenda SET time_consult_start = '$fecha', service_id = '$servicio_id' WHERE id_agenda = $id_agenda");
 
     // Actualizar la cita (appointments) con el nuevo paciente y doctor
     $conn->query("UPDATE appointments SET user_id = '$paciente_id' WHERE service_id = '$servicio_id'");
@@ -41,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Citas</title>
@@ -56,67 +56,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
 
-<body class="g-sidenav-show   bg-gray-100">
-<div class="min-height-300 bg-dark position-absolute w-100"></div>
-    <?php include 'Navbar.php';?>
-    <?php $current_page = 'citas'; ?>
-    <?php include 'sidenav_admin.php';?>
-    <main class="main-content position-relative border-radius-lg ">
+<body class="g-sidenav-show bg-gray-100">
+  <div class="min-height-300 bg-dark position-absolute w-100"></div>
+  <?php include 'Navbar.php'; ?>
+  <?php $current_page = 'citas'; ?>
+  <?php include 'sidenav_admin.php'; ?>
 
+  <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder text-white mb-0">Listado de citas</h2>
-        </nav>
+          <nav aria-label="breadcrumb">
+            <h2 class="font-weight-bolder text-white mb-0">Listado de citas</h2>
+          </nav>
         </div>
         <div>
           <div class="card">
           </div>
           <div class="card-body">
-          <div class="chart">
-          <ul class="list-group">
-            <?php
-              $sql = "SELECT 
-              a.id_agenda,
-              a.date AS hora_cita,
-              s.service_id,
-              s.name AS servicio,
-              s.user_id AS doctor_id,
-              CONCAT(doc.name, ' ', doc.last_name) AS doctor,
-              CONCAT(pac.name, ' ', pac.last_name) AS paciente,
-              pac.user_id AS paciente_id
+            <div class="chart">
+              <ul class="list-group">
+                <?php
+              $sql = "
+              SELECT 
+                DATE_FORMAT(a.time_consult_start, '%Y-%m-%d') AS fecha, 
+                s.name AS servicio,
+                CONCAT(u1.name, ' ', u1.last_name) AS paciente, 
+                u1.user_id AS paciente_id,
+                CONCAT(u2.name, ' ', u2.last_name) AS doctor, 
+                u2.user_id AS doctor_id,
+                a.time_consult_start AS hora_cita, 
+                a.id_agenda, 
+                a.service_id, 
+                a.time_consult_finish
               FROM agenda a
               JOIN service s ON a.service_id = s.service_id
-              JOIN user doc ON s.user_id = doc.user_id
               JOIN appointments ap ON ap.service_id = s.service_id
-              JOIN user pac ON ap.user_id = pac.user_id
-              WHERE ap.user_id = pac.user_id
-              ORDER BY a.date ASC";
-              $result = $conn->query($sql);
-              while ($row = $result->fetch_assoc()): ?>
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div>
-            <strong><?= htmlspecialchars($row['paciente']) ?></strong><br>
-            Servicio: <?= htmlspecialchars($row['servicio']) ?><br>
-            Doctor: <?= htmlspecialchars($row['doctor']) ?><br>
-            Hora: <?= date("d/m/Y H:i", strtotime($row['hora_cita'])) ?>
+              JOIN user u1 ON ap.user_id = u1.user_id AND u1.rol = 'pacient'
+              JOIN user u2 ON s.user_id = u2.user_id AND u2.rol = 'professional'
+              ORDER BY fecha
+            ";
+                $result = $conn->query($sql);
+                while ($row = $result->fetch_assoc()): ?>
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong><?= htmlspecialchars($row['paciente']) ?></strong><br>
+                      Servicio: <?= htmlspecialchars($row['servicio']) ?><br>
+                      Doctor: <?= htmlspecialchars($row['doctor']) ?><br>
+                      Hora: <?= date("d/m/Y H:i", strtotime($row['hora_cita'])) ?>
+                    </div>
+                    <div>
+                      <button class="btn btn-sm btn-primary"
+                        onclick="abrirModalEditar(<?= $row['id_agenda'] ?>, '<?= addslashes(htmlspecialchars($row['hora_cita'])) ?>', <?= $row['doctor_id'] ?>, <?= $row['service_id'] ?>, <?= $row['paciente_id'] ?>)">Editar</button>
+                      <button class="btn btn-sm btn-danger"
+                        onclick="abrirModalEliminar(<?= $row['id_agenda'] ?>)">Eliminar</button>
+                    </div>
+                  </li>
+                <?php endwhile; ?>
+              </ul>
+            </div>
           </div>
-          <div>
-            <button class="btn btn-sm btn-primary" onclick="abrirModalEditar(<?= $row['id_agenda'] ?>, '<?= addslashes(htmlspecialchars($row['hora_cita'])) ?>', <?= $row['doctor_id'] ?>, <?= $row['service_id'] ?>, <?= $row['paciente_id'] ?>)">Editar</button>
-            <button class="btn btn-sm btn-danger" onclick="abrirModalEliminar(<?= $row['id_agenda'] ?>)">Eliminar</button>
-          </div>
-        </li>
-      <?php endwhile; ?>
-    </ul>
-  </div>
-          </div>
-        </div>
         </div>
       </div>
     </div>
-</div>
-    
+  </main>
 
   <!-- Modal Editar -->
   <div class="modal fade" id="modalEditar" tabindex="-1">
@@ -211,4 +214,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   </script>
 </body>
+
 </html>
