@@ -1,5 +1,9 @@
 <?php
 session_start(); // Iniciar sesión
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 // Conexión a la base de datos
 $host = 'Localhost';
@@ -30,9 +34,11 @@ if ($result->num_rows > 0) {
     // Verificar la contraseña
     if ($password === $userData['password']) {
         // Contraseña correcta, iniciar sesión
-        $_SESSION['user'] = $userData['id'];
+        $_SESSION['user'] = $userData['user_id'];
         $_SESSION['name'] = $userData['name'];
         $_SESSION['role'] = $userData['rol'];
+     //   echo 'ROL GUARDADO: ' . $_SESSION['role']; exit;
+
 
         // Redirigir al dashboard según el rol
         if ($userData['rol'] == 'admin') {
