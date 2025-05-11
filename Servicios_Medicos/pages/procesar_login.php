@@ -1,62 +1,97 @@
 <?php
-session_start(); // Iniciar sesión
+session_start();
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+/////////////////////
+// CLASE FACHADA   //
+/////////////////////
+class LoginFacade {
+    public static function authenticate($username, $password) {
+        $db = new Database();
+        $conn = $db->connect();
+        $userService = new UserService($conn);
+        $user = $userService->getUserByUsername($username);
 
-// Conexión a la base de datos
-$host = 'Localhost';
-$db = 'Servicios_Medicos';
-$db_user = 'root';
-$pass = '1234';
+        if ($user && $password === $user['password']) { // Aquí puedes usar password_verify()
+            return $user;
+        }
 
-$mysqli = new mysqli($host, $db_user, $pass, $db);
-if ($mysqli->connect_error) {
-    die("Error de conexión: " . $mysqli->connect_error);
+        return false;
+    }
 }
+
+/////////////////////////
+// CLASE DB CONNECTION //
+/////////////////////////
+class Database {
+    private $host = 'localhost';
+    private $db = 'Servicios_Medicos';
+    private $user = 'root';
+    private $pass = '1234';
+
+    public function connect() {
+        $conn = new mysqli($this->host, $this->user, $this->pass, $this->db);
+
+        if ($conn->connect_error) {
+            die("Error de conexión: " . $conn->connect_error);
+        }
+
+        return $conn;
+    }
+}
+
+/////////////////////////
+// SERVICIO DE USUARIO //
+/////////////////////////
+class UserService {
+    private $conn;
+
+    public function __construct($connection) {
+        $this->conn = $connection;
+    }
+
+    public function getUserByUsername($username) {
+        $stmt = $this->conn->prepare("SELECT * FROM user WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+}
+
+/////////////////////////
+// MANEJO PRINCIPAL    //
+/////////////////////////
 
 // Recibir datos del formulario
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Consultar si el usuario existe
-$sql = "SELECT * FROM user WHERE username = ?";
-$stmt = $mysqli->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+// Autenticación
+$user = LoginFacade::authenticate($username, $password);
 
-if ($result->num_rows > 0) {
-    // Si el usuario existe, obtener la fila
-    $userData = $result->fetch_assoc();
+if ($user) {
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['name'] = $user['name'];
+    $_SESSION['role'] = $user['rol'];
 
-    // Verificar la contraseña
-    if ($password === $userData['password']) {
-        // Contraseña correcta, iniciar sesión
-        $_SESSION['user_id'] = $userData['user_id'];  // Cambiar 'user' a 'user_id'
-        $_SESSION['name'] = $userData['name'];
-        $_SESSION['role'] = $userData['rol'];
-
-        // Redirigir al dashboard según el rol
-        if ($userData['rol'] == 'admin') {
+    // Redirigir al dashboard según rol
+    switch ($user['rol']) {
+        case 'admin':
             header("Location: dashboard_admin.php");
-        } elseif ($userData['rol'] == 'pacient') {
+            break;
+        case 'pacient':
             header("Location: dashboard_patient.php");
-        } elseif ($userData['rol'] == 'professional') {
+            break;
+        case 'professional':
             header("Location: dashboard_medico.php");
-        } else {
+            break;
+        default:
             header("Location: index.php");
-        }
-        exit();
-    } else {
-        // Contraseña incorrecta
-        echo "Contraseña incorrecta.";
+            break;
     }
+    exit();
 } else {
-    // Usuario no encontrado
-    echo "El usuario no existe.";
+    echo "Usuario o contraseña incorrecta.";
 }
-
-$mysqli->close();
 ?>
