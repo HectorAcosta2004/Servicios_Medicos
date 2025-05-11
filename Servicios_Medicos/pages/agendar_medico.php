@@ -2,9 +2,11 @@
 session_start();
 
 
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'professional') {
-    header("Location: index.php");
-    exit();
+
+// Verificar si el usuario está logueado y si es un 'professional'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
+  header("Location: index.php");
+  exit();
 }
 $conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
 
