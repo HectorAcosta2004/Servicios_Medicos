@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-
-// Verificar si el usuario está logueado y si es un 'professional'
+// Verificar si el usuario está logueado y si es un 'admin'
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header("Location: index.php");
   exit();
@@ -68,63 +67,107 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Realizar la consulta al PHP para obtener los datos
+    // Sujeto que notificará a los observadores
+    class Subject {
+      constructor() {
+        this.observers = [];
+      }
+
+      registerObserver(observer) {
+        this.observers.push(observer);
+      }
+
+      removeObserver(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);
+      }
+
+      notifyObservers(data) {
+        this.observers.forEach(observer => observer.update(data));
+      }
+    }
+
+    // Observador que actualizará el gráfico
+    class ChartObserver {
+      constructor(chart) {
+        this.chart = chart;
+      }
+
+      update(data) {
+        this.chart.data.labels = data.weeks;
+        this.chart.data.datasets = data.datasets;
+        this.chart.update();
+      }
+    }
+
+    // Crear el sujeto
+    const subject = new Subject();
+
+    // Crear el gráfico
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: []
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Crear y registrar el observador (el gráfico)
+    const chartObserver = new ChartObserver(myChart);
+    subject.registerObserver(chartObserver);
+
+    // Obtener los datos desde PHP (con fetch)
     fetch('datos_grafica.php')
-        .then(response => response.json())
-        .then(data => {
-            // Procesar los datos y construir las etiquetas y valores para la gráfica
-            const services = [...new Set(data.map(item => item.service_name))]; // Servicios únicos
-            const weeks = [...new Set(data.map(item => item.week_number))]; // Semanas únicas
+      .then(response => response.json())
+      .then(data => {
+        // Procesar los datos y preparar los arrays para la gráfica
+        const services = [...new Set(data.map(item => item.service_name))];
+        const weeks = [...new Set(data.map(item => item.week_number))];
+        const serviceData = {};
 
-            // Inicializar un objeto para almacenar los datos por servicio y semana
-            const serviceData = {};
+        services.forEach(service => {
+          serviceData[service] = new Array(weeks.length).fill(0);
+        });
 
-            // Llenar el objeto con los datos de pacientes por semana
-            services.forEach(service => {
-                serviceData[service] = new Array(weeks.length).fill(0);
-            });
+        data.forEach(item => {
+          const serviceIndex = services.indexOf(item.service_name);
+          const weekIndex = weeks.indexOf(item.week_number);
+          serviceData[item.service_name][weekIndex] = item.patients_count;
+        });
 
-            // Llenar los datos en el objeto serviceData
-            data.forEach(item => {
-                const serviceIndex = services.indexOf(item.service_name);
-                const weekIndex = weeks.indexOf(item.week_number);
-                serviceData[item.service_name][weekIndex] = item.patients_count;
-            });
+        // Crear los datasets para cada servicio
+        const datasets = services.map(service => ({
+          label: service,
+          data: serviceData[service],
+          borderColor: getRandomColor(),
+          backgroundColor: getRandomColor(0.2),
+          borderWidth: 1
+        }));
 
-            // Crear los datasets para cada servicio
-            const datasets = services.map(service => ({
-                label: service,
-                data: serviceData[service],
-                borderColor: getRandomColor(),
-                backgroundColor: getRandomColor(0.2),
-                borderWidth: 1
-            }));
+        // Crear un objeto con los datos procesados
+        const chartData = {
+          weeks: weeks,
+          datasets: datasets
+        };
 
-            // Crear la gráfica
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: weeks,
-                    datasets: datasets
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Error:', error));
+        // Notificar a los observadores (el gráfico) para actualizar los datos
+        subject.notifyObservers(chartData);
+      })
+      .catch(error => console.error('Error:', error));
 
     // Función para generar colores aleatorios
     function getRandomColor(alpha = 1) {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        return `rgba(${r},${g},${b},${alpha})`;
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgba(${r},${g},${b},${alpha})`;
     }
   </script>
   
