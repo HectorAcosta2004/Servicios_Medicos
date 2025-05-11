@@ -1,44 +1,82 @@
 <?php
-
-session_start(); // Iniciar sesión
+session_start();
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Verificar si el usuario está logueado y si es un 'professional'
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
     header("Location: index.php");
     exit();
 }
 
-// Conexión a la base de datos
+interface Cita {
+    public function mostrarCita();
+}
+
+class CitaIndividual implements Cita {
+    private $hora_inicio;
+    private $hora_finalizacion;
+    private $paciente;
+
+    public function __construct($hora_inicio, $hora_finalizacion, $paciente) {
+        $this->hora_inicio = $hora_inicio;
+        $this->hora_finalizacion = $hora_finalizacion;
+        $this->paciente = $paciente;
+    }
+
+    public function mostrarCita() {
+        echo "Hora de Inicio: $this->hora_inicio | Hora de Finalización: $this->hora_finalizacion | Paciente: $this->paciente<br>";
+    }
+}
+
 $mysqli = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
 if ($mysqli->connect_error) {
     die("Error de conexión: " . $mysqli->connect_error);
 }
 
-// Consulta SQL
+$fecha_filtrada = $_GET['fecha'] ?? null;
+
 $sql = "
   SELECT 
     DATE(a.time_consult_start) AS fecha, 
     a.time_consult_start, 
-    a.time_consult_finish,  -- Asegúrate de que esta línea esté incluida
-    s.name AS servicio,
-    CONCAT(u1.name, ' ', u1.last_name) AS paciente, 
-    CONCAT(u2.name, ' ', u2.last_name) AS doctor
+    a.time_consult_finish, 
+    CONCAT(u1.name, ' ', u1.last_name) AS paciente
   FROM agenda a
   JOIN service s ON a.service_id = s.service_id
   JOIN appointments ap ON ap.service_id = s.service_id
   JOIN user u1 ON ap.user_id = u1.user_id AND u1.rol = 'pacient'
   JOIN user u2 ON s.user_id = u2.user_id AND u2.rol = 'professional'
-  WHERE u2.user_id = ?  -- Agregar la condición para que solo vea las citas del médico actual
-  ORDER BY a.time_consult_start
+  WHERE u2.user_id = ?
 ";
 
+if ($fecha_filtrada) {
+    $sql .= " AND DATE(a.time_consult_start) = ?";
+}
+
+$sql .= " ORDER BY a.time_consult_start";
+
 $stmt = $mysqli->prepare($sql);
-$stmt->bind_param("i", $_SESSION['user_id']);  // Usar el ID del usuario de la sesión
+if ($fecha_filtrada) {
+    $stmt->bind_param("is", $_SESSION['user_id'], $fecha_filtrada);
+} else {
+    $stmt->bind_param("i", $_SESSION['user_id']);
+}
 $stmt->execute();
 $result = $stmt->get_result();
+
+$datosCitas = [];
+
+while ($row = $result->fetch_assoc()) {
+    $hora_inicio = !empty($row['time_consult_start']) ? $row['time_consult_start'] : 'No disponible';
+    $hora_finalizacion = !empty($row['time_consult_finish']) ? $row['time_consult_finish'] : 'No disponible';
+    $paciente = htmlspecialchars($row['paciente']);
+
+    $datosCitas[] = [
+        'hora_inicio' => $hora_inicio,
+        'hora_finalizacion' => $hora_finalizacion,
+        'paciente' => $paciente
+    ];
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,15 +98,22 @@ $result = $stmt->get_result();
 
   <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="row mb-4">
+        <div class="col-md-6">
           <h2 class="font-weight-bolder text-white mb-0">Mis citas</h2>
+        </div>
+        <div class="col-md-6 text-end">
+          <form method="GET" class="d-flex justify-content-end align-items-center">
+            <label for="fecha" class="me-2 text-white">Filtrar por fecha:</label>
+            <input type="date" name="fecha" id="fecha" class="form-control w-auto" value="<?= htmlspecialchars($fecha_filtrada) ?>">
+            <button type="submit" class="btn btn-primary ms-2">Filtrar</button>
+          </form>
         </div>
       </div>
 
       <div class="card my-4 shadow-sm">
         <div class="card-header pb-0">
-          <h6 class="mb-0">Citas Programadas</h6>
+          <h6 class="mb-0">Citas Programadas <?= $fecha_filtrada ? 'para el ' . $fecha_filtrada : '' ?></h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-4">
@@ -81,25 +126,17 @@ $result = $stmt->get_result();
                 </tr>
               </thead>
               <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                  while ($row = $result->fetch_assoc()) {
-                    // Verificar si las horas de inicio y finalización están vacías o nulas y asignar un valor predeterminado
-                    $time_start = !empty($row['time_consult_start']) ? htmlspecialchars($row['time_consult_start']) : 'No disponible';
-                    $time_finish = !empty($row['time_consult_finish']) ? htmlspecialchars($row['time_consult_finish']) : 'No disponible';
-                    $paciente = htmlspecialchars($row['paciente']);
-
-                    // Imprimir las filas de la tabla
-                    echo "<tr>";
-                    echo "<td>" . $time_start . "</td>";
-                    echo "<td>" . $time_finish . "</td>";
-                    echo "<td>" . $paciente . "</td>";
-                    echo "</tr>";
-                  }
-                } else {
-                  echo "<tr><td colspan='3'>No se encontraron citas.</td></tr>";
-                }
-                ?>
+                <?php if (count($datosCitas) > 0): ?>
+                  <?php foreach ($datosCitas as $cita): ?>
+                    <tr>
+                      <td><?= $cita['hora_inicio'] ?></td>
+                      <td><?= $cita['hora_finalizacion'] ?></td>
+                      <td><?= $cita['paciente'] ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <tr><td colspan="3">No se encontraron citas.</td></tr>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
@@ -113,8 +150,8 @@ $result = $stmt->get_result();
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/chartjs.min.js"></script>
   <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
 </body>
 </html>
+
 <?php $mysqli->close(); ?>
