@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'pacient') {
@@ -7,31 +6,35 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'pacient') {
     exit();
 }
 
-$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
+$user_id = $_SESSION['user'] ?? null;
+if (!$user_id) {
+    echo "No se ha encontrado el ID del usuario en la sesión.";
+    exit();
+}
 
+$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Consulta SIN FILTRAR por usuario
-$sql = "SELECT a.cita_id, s.name AS service_name, CONCAT(u.name, ' ', u.last_name) AS doctor_name, 
+// Consulta solo las citas del paciente actual, con info del servicio y doctor
+$sql = "SELECT s.name AS service_name, 
+               CONCAT(u.name, ' ', u.last_name) AS doctor_name,
                s.time_consult_start, s.time_consult_finish
         FROM appointments a
         JOIN service s ON a.service_id = s.service_id
-        JOIN user u ON s.user_id = u.user_id";
+        JOIN user u ON s.user_id = u.user_id
+        WHERE a.user_id = ?";
 
-$result = $conn->query($sql);
-
-if (!$result) {
-    echo "Error en la consulta: " . $conn->error;
-    exit;
-}
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>SERVICIOS MEDICOS</title>
+  <title>Mis Citas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -41,12 +44,11 @@ if (!$result) {
 </head>
 <body class="g-sidenav-show bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
-  <?php include 'Navbar.php';?>
+  <?php include 'Navbar.php'; ?>
   <?php $current_page = 'dashboardp'; ?>
-  <?php include 'sidenav_patient.php';?>
+  <?php include 'sidenav_patient.php'; ?>
 
   <main class="main-content position-relative border-radius-lg">
-
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -56,43 +58,45 @@ if (!$result) {
         </div>
       </div>
 
-
-    <div class="card my-4 shadow-sm">
-      <div class="card-header pb-0">
-        <h6 class="mb-0">Citas Programadas</h6>
-      </div>
-    <div class="card-body px-0 pt-0 pb-2">
-    <div class="table-responsive p-4">
-      <table class="table align-items-center mb-0">
-        <thead>
-          <tr>
-              <th>Servicio</th>
-              <th>Doctor Asignado</th>
-              <th>Fecha y hora</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$row['service_name']}</td>
-                        <td>{$row['doctor_name']}</td>
-                        <td>{$row['time_consult_start']}</td>
-                      </tr>";
-              }
-            } else {
-              echo "<tr><td colspan='4'>No se encontraron citas.</td></tr>";
-            }
-
-            $conn->close();
-            ?>
-          </tbody>
-        </table>
+      <div class="card my-4 shadow-sm">
+        <div class="card-header pb-0">
+          <h6 class="mb-0">Citas Programadas</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-4">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Doctor Asignado</th>
+                  <th>Hora Inicio</th>
+                  <th>Hora Fin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                  while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($row['service_name']) . "</td>
+                            <td>" . htmlspecialchars($row['doctor_name']) . "</td>
+                            <td>" . htmlspecialchars($row['time_consult_start']) . "</td>
+                            <td>" . htmlspecialchars($row['time_consult_finish']) . "</td>
+                          </tr>";
+                  }
+                } else {
+                  echo "<tr><td colspan='4'>No se encontraron citas.</td></tr>";
+                }
+                ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
 </body>
 </html>
-            
+<?php
+$conn->close();
+?>
