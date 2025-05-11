@@ -16,6 +16,7 @@ $result_usuarios = $conn->query($sql);
 if (!$result_usuarios) {
   die("Error de consulta: " . $conn->error);
 }
+include 'views/modals/ModalFactory.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,11 +66,16 @@ if (!$result_usuarios) {
                         <td><?= $row['last_name'] ?></td>
                         <td><?= $row['rol'] ?></td>
                         <td>
-                          <a href="editar_usuario.php?user_id=<?= $row['user_id'] ?>">Editar</a> |
+                          <a href="#" data-bs-toggle="modal" data-bs-target="#modalEditarU<?= $row['user_id'] ?>">Editar</a>
                           <a href="eliminar_usuario.php?user_id=<?= $row['user_id'] ?>"
                             onclick="return confirm('¿Deseas eliminar este usuario?')">Eliminar</a>
                         </td>
                       </tr>
+                        <?php
+                          ModalFactory::render('editar_usuarios', [
+                            'user' => $row
+                          ]);
+                        ?>
                     <?php endwhile; ?>
                   </tbody>
                 </table>
