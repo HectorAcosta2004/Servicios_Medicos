@@ -7,6 +7,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
   exit();
 }
 
+require_once 'includes/FlashMessage.php';
+
 $conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
 
 if ($conn->connect_error) {
@@ -46,17 +48,20 @@ class ServiceDAO {
 // Crear una instancia del DAO
 $serviceDAO = new ServiceDAO($conn);
 
+$flashMessage = FlashMessage::getInstance();
+
 // Editar horario existente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar'])) {
     $service_id = $_POST['service_id'];
     $start = $_POST['start'];
     $finish = $_POST['finish'];
 
-    // Asegurarse de que solo el servicio del usuario logueado se puede editar
     if ($serviceDAO->updateServiceTime($service_id, $start, $finish, $user_id)) {
-        echo "<p>Horario actualizado correctamente.</p>";
+        // Agregar mensaje de éxito
+        $flashMessage->addMessage('Horario actualizado correctamente.', 'success');
     } else {
-        echo "<p>No se pudo actualizar el horario. Verifica los datos.</p>";
+        // Agregar mensaje de error
+        $flashMessage->addMessage('No se pudo actualizar el horario. Verifica los datos.', 'danger');
     }
 }
 
@@ -67,31 +72,45 @@ $result = $serviceDAO->getServicesByUser($user_id);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
   <title>Mis Horarios</title>
-  <link rel="stylesheet" href="../assets/css/argon-dashboard.css?v=2.1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
-<body>
+<body class="g-sidenav-show bg-gray-100">
+  <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <?php include 'Navbar.php'; ?>
+  <?php $current_page = 'agendarm'; ?>
   <?php include 'sidenav_medico.php'; ?>
 
   <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">
-      <h2 class="text-white">Mis Horarios</h2>
-
-      <div class="card mt-4">
-        <div class="card-header">
-          <h6>Modificar horarios asignados</h6>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <h2 class="font-weight-bolder text-white mb-0">Mis Horarios</h2>
         </div>
-        <div class="card-body">
-          <?php if ($result->num_rows > 0): ?>
-          <table class="table table-bordered table-striped">
+      </div>
+      <?php
+        // Mostrar mensajes flash si existen
+        $flashMessage->displayMessages();
+      ?>
+      <div class="card my-4 shadow-sm">
+        <div class="card-header pb-0">
+          <h6 class="mb-0">Modificar horarios asignados</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-4">
+            <?php if ($result->num_rows > 0): ?>
+          <table class="table align-items-center mb-0">
             <thead>
               <tr>
                 <th>Servicio</th>
-                <th>Hora de Inicio</th>
-                <th>Hora de Fin</th>
-                <th>Acción</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
