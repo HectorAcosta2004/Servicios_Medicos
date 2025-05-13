@@ -25,9 +25,11 @@ interface CitaEstrategia {
 
 class CitasPorDefecto implements CitaEstrategia {
   public function obtenerCitas($conn, $user_id) {
-    $sql = "SELECT s.name AS service_name, 
+    $sql = "SELECT cita_id, 
+                   s.name AS service_name, 
                    CONCAT(u.name, ' ', u.last_name) AS doctor_name,
-                   s.time_consult_start, s.time_consult_finish
+                   s.time_consult_start, 
+                   s.time_consult_finish
             FROM appointments a
             JOIN service s ON a.service_id = s.service_id
             JOIN user u ON s.user_id = u.user_id
@@ -39,11 +41,14 @@ class CitasPorDefecto implements CitaEstrategia {
   }
 }
 
+
 class CitasPorDoctor implements CitaEstrategia {
   public function obtenerCitas($conn, $user_id) {
-    $sql = "SELECT s.name AS service_name, 
+    $sql = "SELECT cita_id, 
+                   s.name AS service_name, 
                    CONCAT(u.name, ' ', u.last_name) AS doctor_name,
-                   s.time_consult_start, s.time_consult_finish
+                   s.time_consult_start, 
+                   s.time_consult_finish
             FROM appointments a
             JOIN service s ON a.service_id = s.service_id
             JOIN user u ON s.user_id = u.user_id
@@ -56,11 +61,14 @@ class CitasPorDoctor implements CitaEstrategia {
   }
 }
 
+
 class CitasPorFecha implements CitaEstrategia {
   public function obtenerCitas($conn, $user_id) {
-    $sql = "SELECT s.name AS service_name, 
+    $sql = "SELECT cita_id, 
+                   s.name AS service_name, 
                    CONCAT(u.name, ' ', u.last_name) AS doctor_name,
-                   s.time_consult_start, s.time_consult_finish
+                   s.time_consult_start, 
+                   s.time_consult_finish
             FROM appointments a
             JOIN service s ON a.service_id = s.service_id
             JOIN user u ON s.user_id = u.user_id
@@ -72,6 +80,7 @@ class CitasPorFecha implements CitaEstrategia {
     return $stmt->get_result();
   }
 }
+
 
 // CONTEXTO
 class ContextoCita {
@@ -157,6 +166,7 @@ $result = $contexto->obtenerCitas($conn, $user_id);
                   <th>Doctor Asignado</th>
                   <th>Hora Inicio</th>
                   <th>Hora Fin</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -164,11 +174,14 @@ $result = $contexto->obtenerCitas($conn, $user_id);
                 if ($result->num_rows > 0) {
                   while ($row = $result->fetch_assoc()) {
                     echo "<tr>
-                            <td>" . htmlspecialchars($row['service_name']) . "</td>
-                            <td>" . htmlspecialchars($row['doctor_name']) . "</td>
-                            <td>" . htmlspecialchars($row['time_consult_start']) . "</td>
-                            <td>" . htmlspecialchars($row['time_consult_finish']) . "</td>
-                          </tr>";
+                      <td>" . htmlspecialchars($row['service_name']) . "</td>
+                      <td>" . htmlspecialchars($row['doctor_name']) . "</td>
+                      <td>" . htmlspecialchars($row['time_consult_start']) . "</td>
+                      <td>" . htmlspecialchars($row['time_consult_finish']) . "</td>
+                      <td> 
+                        <a href='cancelar_cita.php?cita_id=" . htmlspecialchars($row['cita_id']) . "' class='btn btn-danger'>Cancelar</a>
+                      </td>
+                    </tr>";
                   }
                 } else {
                   echo "<tr><td colspan='4'>No se encontraron citas.</td></tr>";

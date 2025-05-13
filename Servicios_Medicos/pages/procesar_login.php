@@ -3,6 +3,10 @@ session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+require_once 'decorator/basic_message.php';
+require_once 'decorator/icon_decorator.php';
+require_once 'decorator/alert_decorator.php';
+
 /////////////////////
 // CLASE FACHADA   //
 /////////////////////
@@ -92,6 +96,9 @@ if ($user) {
     }
     exit();
 } else {
-    echo "Usuario o contraseña incorrecta.";
+    $msg = new BasicMessage("Usuario o contraseña incorrectos.");
+    $msgWithIcon = new IconDecorator($msg, '🔐');
+    $alert = new AlertDecorator($msgWithIcon, 'error', 'Error de inicio de sesión');
+    echo $alert->render();
 }
 ?>
