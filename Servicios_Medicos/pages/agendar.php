@@ -1,23 +1,22 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado y si es un 'professional'
+// Verificar si el usuario está logueado y si es un 'pacient'
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'pacient') {
   header("Location: index.php");
   exit();
 }
-$user_id = $_SESSION['user_id'] ?? null;
 
+$user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
     echo "No se ha encontrado el ID del usuario en la sesión.";
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
-
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+require_once 'database.php';
+// Obtener la instancia de la conexión utilizando el patrón Singleton
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 // Traer servicios disponibles
 $sql_services = "SELECT s.service_id, s.name AS service_name, CONCAT(u.name, ' ', u.last_name) AS doctor_name, s.time_consult_start, s.time_consult_finish
@@ -50,9 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
                     $service_stmt->close();
 
                     // Insertar en agenda
-                    $agenda_stmt = $conn->prepare("INSERT INTO agenda (time_consult_start, time_consult_finish, service_id) VALUES (?, ?, ?)");
+                    $agenda_stmt = $conn->prepare("INSERT INTO agenda (service_id) VALUES (?)");
                     if ($agenda_stmt) {
-                        $agenda_stmt->bind_param("ssi", $start_time, $finish_time, $service_id);
+                        $agenda_stmt->bind_param("i", $service_id);
                         $agenda_stmt->execute();
                         $agenda_stmt->close();
                     } else {
@@ -73,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

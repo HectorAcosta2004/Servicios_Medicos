@@ -7,13 +7,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
   exit();
 }
 
+// Incluir la clase Database
+require_once 'database.php'; // Ajusta la ruta según corresponda
 require_once 'includes/FlashMessage.php';
 
-$conn = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
-
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+// Obtener la instancia de la base de datos utilizando el Singleton
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 $user_id = $_SESSION['user_id'] ?? null;
 
@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar'])) {
 $result = $serviceDAO->getServicesByUser($user_id);
 ?>
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -99,7 +100,7 @@ $result = $serviceDAO->getServicesByUser($user_id);
       ?>
       <div class="card my-4 shadow-sm">
         <div class="card-header pb-0">
-          <h6 class="mb-0">Modificar horarios asignados</h6>
+          <h6 class="mb-0">Crear horarios</h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-4">

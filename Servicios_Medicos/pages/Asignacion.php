@@ -1,28 +1,42 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado y si es un 'professional'
+// Verificar si el usuario está logueado y si es un 'admin'
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header("Location: index.php");
   exit();
 }
 
-$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+// Incluir la clase Database (ajusta la ruta si es necesario)
+require_once 'database.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['service_id'], $_POST['user_id'])) {
-    $service_id = $conn->real_escape_string($_POST['service_id']);
-    $user_id = $conn->real_escape_string($_POST['user_id']);
+try {
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
 
-    $check = $conn->query("SELECT * FROM service WHERE service_id = '$service_id'");
-    if ($check->num_rows > 0) {
-        $conn->query("UPDATE service SET user_id = '$user_id' WHERE service_id = '$service_id'");
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['service_id'], $_POST['user_id'])) {
+        $service_id = $_POST['service_id'];
+        $user_id = $_POST['user_id'];
+
+        // Verificar si existe el servicio
+        $stmt = $conn->prepare("SELECT * FROM service WHERE service_id = ?");
+        $stmt->bind_param("i", $service_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Hacer la actualización
+            $update = $conn->prepare("UPDATE service SET user_id = ? WHERE service_id = ?");
+            $update->bind_param("ii", $user_id, $service_id);
+            $update->execute();
+        }
+
+        echo "<script>alert('Asignación guardada exitosamente.'); window.location.href='asignacion.php';</script>";
+        exit;
     }
 
-    echo "<script>alert('Asignación guardada exitosamente.'); window.location.href='asignacion.php';</script>";
-    exit;
+} catch (Exception $e) {
+    die("Error en la base de datos: " . $e->getMessage());
 }
 
 // Consultas
@@ -31,7 +45,7 @@ $result_services = $conn->query("SELECT service_id, name FROM service");
 $result_doctors = $conn->query("SELECT user_id, CONCAT(name, ' ', last_name) AS doctor_name FROM user WHERE rol = 'professional'");
 $result_asignaciones = $conn->query("SELECT s.service_id, s.name AS service_name, u.user_id, CONCAT(u.name, ' ', u.last_name) AS doctor_name, s.time_consult_start, s.time_consult_finish FROM service s JOIN user u ON s.user_id = u.user_id WHERE u.rol = 'professional'");
 
-include 'views/modals/ModalFactory.php';
+include 'modals/ModalFactory.php';
 ?>
 
 <!DOCTYPE html>

@@ -1,23 +1,41 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado y si es un 'professional'
+// Verificar si el usuario está logueado y si es un 'admin'
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header("Location: index.php");
   exit();
 }
-// Conectar a la base de datos
-$conn = new mysqli("localhost", "root", "1234", "servicios_medicos");
-if ($conn->connect_error) {
-  die("Error de conexion: ". $conn->connect_error);
+
+// Incluir la clase Database (ajusta la ruta si es necesario)
+require_once 'database.php';
+
+try {
+  // Obtener la instancia y conexión
+  $db = Database::getInstance();
+  $conn = $db->getConnection();
+
+  // Ejecutar consulta
+  $sql = "SELECT user_id, name, last_name, rol FROM user";
+  $result_usuarios = $conn->query($sql);
+
+  // Verificar si hay resultados
+  if ($result_usuarios->num_rows > 0) {
+    // Obtener todos los resultados como un array asociativo
+    $usuarios = [];
+    while ($row = $result_usuarios->fetch_assoc()) {
+      $usuarios[] = $row;
+    }
+  } else {
+    $usuarios = [];
   }
-$sql = "SELECT user_id,name,last_name,rol FROM user";
-$result_usuarios = $conn->query($sql);
-if (!$result_usuarios) {
-  die("Error de consulta: " . $conn->error);
+} catch (Exception $e) {
+  die("Error en la base de datos: " . $e->getMessage());
 }
-include 'views/modals/ModalFactory.php';
+
+include 'modals/ModalFactory.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -41,7 +59,7 @@ include 'views/modals/ModalFactory.php';
       <div class="row">
         <div class="col-12">
 
-          <h2 class="font-weight-bolder text-white mb-3">Administración de usaurios</h2>
+          <h2 class="font-weight-bolder text-white mb-3">Administración de usuarios</h2>
 
           <!-- Tabla Usuarios-->
           <div class="card mb-4">
@@ -59,24 +77,25 @@ include 'views/modals/ModalFactory.php';
                     </tr>
                   </thead>
                   <tbody>
-                    <?php while ($row = $result_usuarios->fetch_assoc()): ?>
+                    <?php foreach ($usuarios as $row): ?>
                       <tr>
-                      <!-- <td><?= $row['user_id'] ?></td>-->
-                        <td><?= $row['name'] ?></td>
-                        <td><?= $row['last_name'] ?></td>
-                        <td><?= $row['rol'] ?></td>
+                        <td><?= htmlspecialchars($row['name']) ?></td>
+                        <td><?= htmlspecialchars($row['last_name']) ?></td>
+                        <td><?= htmlspecialchars($row['rol']) ?></td>
                         <td>
                           <a href="#" data-bs-toggle="modal" data-bs-target="#modalEditarU<?= $row['user_id'] ?>">Editar</a>
-                          <a href="eliminar_usuario.php?user_id=<?= $row['user_id'] ?>"
-                            onclick="return confirm('¿Deseas eliminar este usuario?')">Eliminar</a>
+                          <form action="eliminar_usuario.php" method="POST" onsubmit="return confirm('¿Deseas eliminar este usuario?')">
+                            <input type="hidden" name="user_id" value="<?= $row['user_id'] ?>">
+                            <button type="submit">Eliminar</button>
+                          </form>
                         </td>
                       </tr>
-                        <?php
-                          ModalFactory::render('editar_usuarios', [
-                            'user' => $row
-                          ]);
-                        ?>
-                    <?php endwhile; ?>
+                      <?php
+                        ModalFactory::render('editar_usuarios', [
+                          'user' => $row
+                        ]);
+                      ?>
+                    <?php endforeach; ?>
                   </tbody>
                 </table>
               </div>

@@ -27,11 +27,11 @@ class CitaIndividual implements Cita {
         echo "Hora de Inicio: $this->hora_inicio | Hora de Finalización: $this->hora_finalizacion | Paciente: $this->paciente<br>";
     }
 }
+require_once 'database.php';
 
-$mysqli = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
-if ($mysqli->connect_error) {
-    die("Error de conexión: " . $mysqli->connect_error);
-}
+// Obtener la instancia de la base de datos usando el Singleton
+$db = Database::getInstance();
+$mysqli = $db->getConnection();
 
 $fecha_filtrada = $_GET['fecha'] ?? null;
 
