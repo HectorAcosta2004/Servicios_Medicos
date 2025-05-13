@@ -74,6 +74,7 @@ include 'modals/ModalFactory.php';
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>Rol</th>
+                      <th>Acción</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -84,10 +85,6 @@ include 'modals/ModalFactory.php';
                         <td><?= htmlspecialchars($row['rol']) ?></td>
                         <td>
                           <a href="#" data-bs-toggle="modal" data-bs-target="#modalEditarU<?= $row['user_id'] ?>">Editar</a>
-                          <form action="eliminar_usuario.php" method="POST" onsubmit="return confirm('¿Deseas eliminar este usuario?')">
-                            <input type="hidden" name="user_id" value="<?= $row['user_id'] ?>">
-                            <button type="submit">Eliminar</button>
-                          </form>
                         </td>
                       </tr>
                       <?php
