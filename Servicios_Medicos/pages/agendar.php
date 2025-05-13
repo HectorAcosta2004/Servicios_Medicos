@@ -14,9 +14,76 @@ if (!$user_id) {
 }
 
 require_once 'database.php';
+
 // Obtener la instancia de la conexión utilizando el patrón Singleton
 $db = Database::getInstance();
 $conn = $db->getConnection();
+
+
+// ----- CLASE REAL: Servicio que ejecuta la lógica de agendar -----
+class AppointmentService {
+    public function agendar($conn, $user_id, $service_id) {
+        $stmt = $conn->prepare("INSERT INTO appointments (user_id, service_id) VALUES (?, ?)");
+        if (!$stmt) return "Error preparando cita.";
+
+        $stmt->bind_param("ii", $user_id, $service_id);
+        if (!$stmt->execute()) return "Error al agendar cita.";
+        $stmt->close();
+
+        // Obtener hora inicio y fin del servicio
+        $stmt = $conn->prepare("SELECT time_consult_start, time_consult_finish FROM service WHERE service_id = ?");
+        $stmt->bind_param("i", $service_id);
+        $stmt->execute();
+        $stmt->bind_result($start, $finish);
+
+        if ($stmt->fetch()) {
+            $stmt->close();
+            $agenda_stmt = $conn->prepare("INSERT INTO agenda (service_id) VALUES (?)");
+            $agenda_stmt->bind_param("i", $service_id);
+            $agenda_stmt->execute();
+            $agenda_stmt->close();
+            return "¡Cita y agenda registradas exitosamente!";
+        } else {
+            return "No se encontró horario del servicio.";
+        }
+    }
+}
+
+// ----- PROXY: controla el acceso a AppointmentService -----
+class AppointmentProxy {
+    private $realService;
+
+    public function __construct() {
+        $this->realService = new AppointmentService();
+    }
+
+    public function agendar($conn, $user_id, $service_id) {
+        if (!$user_id || !$service_id) {
+            return "Datos incompletos para agendar.";
+        }
+
+        // Validación opcional: evitar citas duplicadas
+        $check = $conn->prepare("SELECT cita_id FROM appointments WHERE user_id = ? AND service_id = ?");
+        $check->bind_param("ii", $user_id, $service_id);
+        $check->execute();
+        $check->store_result();
+
+        if ($check->num_rows > 0) {
+            return "Ya tienes una cita con este servicio.";
+        }
+
+        return $this->realService->agendar($conn, $user_id, $service_id);
+    }
+}
+
+// ----- PROCESO DE AGENDA -----
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
+    $service_id = $_POST['service_id'];
+    $proxy = new AppointmentProxy();
+    $mensaje = $proxy->agendar($conn, $user_id, $service_id);
+    echo "<script>alert('$mensaje');</script>";
+}
+
 
 // Traer servicios disponibles
 $sql_services = "SELECT s.service_id, s.name AS service_name, CONCAT(u.name, ' ', u.last_name) AS doctor_name, s.time_consult_start, s.time_consult_finish
@@ -28,55 +95,10 @@ if (!$result_services) {
     echo "Error cargando servicios: " . $conn->error;
     exit;
 }
-
-// Insertar cita y agenda
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
-    $service_id = $_POST['service_id'];
-
-    $stmt = $conn->prepare("INSERT INTO appointments (user_id, service_id) VALUES (?, ?)");
-    if ($stmt) {
-        $stmt->bind_param("ii", $user_id, $service_id);
-        if ($stmt->execute()) {
-
-            // Obtener hora inicio y fin del servicio
-            $service_stmt = $conn->prepare("SELECT time_consult_start, time_consult_finish FROM service WHERE service_id = ?");
-            if ($service_stmt) {
-                $service_stmt->bind_param("i", $service_id);
-                $service_stmt->execute();
-                $service_stmt->bind_result($start_time, $finish_time);
-
-                if ($service_stmt->fetch()) {
-                    $service_stmt->close();
-
-                    // Insertar en agenda
-                    $agenda_stmt = $conn->prepare("INSERT INTO agenda (service_id) VALUES (?)");
-                    if ($agenda_stmt) {
-                        $agenda_stmt->bind_param("i", $service_id);
-                        $agenda_stmt->execute();
-                        $agenda_stmt->close();
-                    } else {
-                        echo "<script>alert('Error al preparar el registro en la agenda.');</script>";
-                    }
-                } else {
-                    echo "<script>alert('No se encontró el horario del servicio.');</script>";
-                }
-            }
-
-            echo "<script>alert('¡Cita y agenda registradas exitosamente!');</script>";
-        } else {
-            echo "<script>alert('Error al agendar la cita.');</script>";
-        }
-        $stmt->close();
-    } else {
-        echo "Error preparando consulta: " . $conn->error;
-    }
-}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Agendar Cita</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,7 +168,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -156,24 +177,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['service_id'])) {
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-                damping: '0.5'
-            }
+            var options = { damping: '0.5' }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
-
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
 </body>
-
 </html>
 
-<?php
-$conn->close();
-?>
+<?php $conn->close(); ?>
