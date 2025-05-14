@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 <body class="g-sidenav-show bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
-  <?php include 'Navbar.php'; ?>
+  <?php include 'Navbar_admin.php'; ?>
   <?php $current_page = 'dashboard'; ?>
   <?php include 'sidenav_admin.php'; ?>
 

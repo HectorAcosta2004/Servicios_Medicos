@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'professional') {
 
 // Incluir la clase Database
 require_once 'database.php'; // Ajusta la ruta según corresponda
-require_once 'includes/FlashMessage.php';
+
 
 // Obtener la instancia de la base de datos utilizando el Singleton
 $db = Database::getInstance();
@@ -47,8 +47,6 @@ class ServiceDAO {
 
 // Crear una instancia del DAO
 $serviceDAO = new ServiceDAO($conn);
-
-$flashMessage = FlashMessage::getInstance();
 
 // Editar horario existente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar'])) {
@@ -94,10 +92,6 @@ $result = $serviceDAO->getServicesByUser($user_id);
           <h2 class="font-weight-bolder text-white mb-0">Mis Horarios</h2>
         </div>
       </div>
-      <?php
-        // Mostrar mensajes flash si existen
-        $flashMessage->displayMessages();
-      ?>
       <div class="card my-4 shadow-sm">
         <div class="card-header pb-0">
           <h6 class="mb-0">Crear horarios</h6>

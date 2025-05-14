@@ -97,8 +97,10 @@ include 'modals/ModalFactory.php';
                       </tr>
                     <?php
                       ModalFactory::render('editar_profesional_servicio', [
-                        'service_id' => $row,  
-                        'doctors' => $result_doctors->fetch_all(MYSQLI_ASSOC) 
+                        'service' => $row,
+                      'services' => $services_data,
+                      'doctors' => $result_doctors,
+                      'modal_id' => 'modalEditarPS' . $row['service_id']
                       ]);
                     ?>
                     <?php endwhile; ?>
@@ -113,8 +115,8 @@ include 'modals/ModalFactory.php';
 
           <?php
             ModalFactory::render('agregar_profesional_servicio', [
-              'services' => $services_data,
-              'doctors' => $result_doctors->fetch_all(MYSQLI_ASSOC)
+              'services' => $services_data,  // Array de servicios obtenidos de la base de datos
+              'doctors' => $result_doctors->fetch_all(MYSQLI_ASSOC)  // Array de doctores obtenidos de la base de datos
             ]);
           ?>
 

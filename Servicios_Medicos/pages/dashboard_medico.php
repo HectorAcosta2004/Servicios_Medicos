@@ -27,33 +27,33 @@ class CitaIndividual implements Cita {
         echo "Hora de Inicio: $this->hora_inicio | Hora de Finalización: $this->hora_finalizacion | Paciente: $this->paciente<br>";
     }
 }
-require_once 'database.php';
 
-// Obtener la instancia de la base de datos usando el Singleton
-$db = Database::getInstance();
-$mysqli = $db->getConnection();
+$mysqli = new mysqli('localhost', 'root', '1234', 'Servicios_Medicos');
+if ($mysqli->connect_error) {
+    die("Error de conexión: " . $mysqli->connect_error);
+}
 
 $fecha_filtrada = $_GET['fecha'] ?? null;
 
 $sql = "
   SELECT 
-    DATE(a.date) AS fecha, 
-    a.date AS time_consult_start, 
-    a.date AS time_consult_finish, 
+    DATE(a.time_consult_start) AS fecha, 
+    a.time_consult_start, 
+    a.time_consult_finish, 
     CONCAT(u1.name, ' ', u1.last_name) AS paciente
   FROM agenda a
   JOIN service s ON a.service_id = s.service_id
   JOIN appointments ap ON ap.service_id = s.service_id
   JOIN user u1 ON ap.user_id = u1.user_id AND u1.rol = 'pacient'
   JOIN user u2 ON s.user_id = u2.user_id AND u2.rol = 'professional'
-  WHERE u2.user_id = ? 
+  WHERE u2.user_id = ?
 ";
 
 if ($fecha_filtrada) {
-    $sql .= " AND DATE(a.date) = ?";  // Filtrar por fecha si está presente
+    $sql .= " AND DATE(a.time_consult_start) = ?";
 }
 
-$sql .= " ORDER BY a.date";  // Ordenar las citas por fecha
+$sql .= " ORDER BY a.time_consult_start";
 
 $stmt = $mysqli->prepare($sql);
 if ($fecha_filtrada) {
