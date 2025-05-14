@@ -4,35 +4,30 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Validar existencia del parámetro
-if (!isset($_GET['service_id'])) {
-    die("Error: No se proporcionó el ID del servicio.");
-}
-
-$service_id = intval($_GET['service_id']);
-
 // Procesar el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nuevo_user_id = intval($_POST['user_id']);  // Asegurarse de que el ID sea un entero
+    // Validar que venga el ID y el nombre del servicio
+    if (!isset($_POST['service_id']) || !isset($_POST['nombre_servicio'])) {
+        die("Error: Datos incompletos.");
+    }
 
-    // Consulta de actualización
-    $update = "UPDATE service 
-               WHERE service_id = $service_id";
+    $service_id = intval($_POST['service_id']);
+    $nombre_servicio = trim($_POST['nombre_servicio']);
 
-    if ($conn->query($update)) {
+    // Preparar consulta segura con prepared statements
+    $stmt = $conn->prepare("UPDATE service SET name = ? WHERE service_id = ?");
+    if (!$stmt) {
+        die("Error en la preparación: " . $conn->error);
+    }
+
+    $stmt->bind_param("si", $nombre_servicio, $service_id);
+
+    if ($stmt->execute()) {
         header("Location: Asignacion.php");
         exit;
     } else {
-        echo "Error al actualizar: " . $conn->error;
+        echo "Error al actualizar: " . $stmt->error;
     }
+} else {
+    echo "Acceso no permitido.";
 }
-
-// Obtener los datos actuales del servicio
-$result = $conn->query("SELECT name FROM service WHERE service_id = $service_id");
-if (!$result || $result->num_rows === 0) {
-    die("Servicio no encontrado.");
-}
-
-$servicio = $result->fetch_assoc();
-
-?>

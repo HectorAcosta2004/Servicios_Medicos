@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="pages/editar_servicio.php" method="POST">
+        <form action="editar_servicio.php" method="POST">
           <!-- ID oculto del servicio -->
           <input type="hidden" name="service_id" value="<?= $service['service_id'] ?>">
 
